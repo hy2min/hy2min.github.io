@@ -1,0 +1,72 @@
+:root {
+  /* Brand palette - Professional Blue/Gray */
+  --brand: #3B82F6; /* blue-500 */
+  --brand-2: #10B981; /* emerald-500 */
+  --brand-dark: #1E40AF; /* blue-800 */
+  --accent: #0EA5E9; /* sky-500 */
+
+  /* Neutral palette via Tailwind-like tokens */
+  --bg: 255 255 255; /* white */
+  --bg-muted: 249 250 251; /* gray-50 */
+  --fg: 17 24 39; /* gray-900 */
+  --fg-muted: 75 85 99; /* gray-600 */
+  --bg-light: #F9FAFB;
+  --bg-dark: #0F172A;
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+
+  /* Radii & rhythm */
+  --r: 16px;
+  --radius: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+
+  /* Effects */
+  --glass-light: rgba(255, 255, 255, 0.7);
+  --glass-dark: rgba(255, 255, 255, 0.08);
+  --shadow-soft: 0 10px 30px rgba(2, 6, 23, 0.08);
+  --shadow-glow: 0 20px 60px rgba(59, 130, 246, 0.3);
+
+  /* Gradients - Subtle and Professional */
+  --brand-gradient: linear-gradient(135deg, #3B82F6, #0EA5E9);
+  --brand-gradient-subtle: linear-gradient(135deg, #60A5FA, #3B82F6);
+  --success-gradient: linear-gradient(135deg, #10B981, #059669);
+}
+
+.dark {
+  --bg: 17 24 39; /* gray-900 */
+  --bg-muted: 2 6 23; /* slate-950 */
+  --fg: 243 244 246; /* gray-100 */
+  --fg-muted: 148 163 184; /* slate-400 */
+  --glass-dark: rgba(255, 255, 255, 0.1);
+  --shadow-glow: 0 20px 60px rgba(59, 130, 246, 0.4);
+}
+
+/* Subtle grid background utility */
+.bg-grid {
+  background-image:
+    radial-gradient(rgba(0,0,0,0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.dark .bg-grid {
+  background-image:
+    radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+}
+
+/* Utilities for glass cards */
+.card-glass {
+  background-color: var(--glass-light);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-soft);
+}
+
+.dark .card-glass {
+  background-color: var(--glass-dark);
+}
+
+/* Motion safety */
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe\:transition-none { transition: none !important; }
+}
