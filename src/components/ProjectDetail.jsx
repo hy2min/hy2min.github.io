@@ -39,7 +39,7 @@ const ProjectDetail = () => {
         github: "https://github.com/hy2min/tikkletikkle",
         demo: "http://tikkle.r-e.kr",
       },
-      image: "/images/tikkle-cover.png",
+      image: "/images/tikkletikkle_screen.png",
       gallery: ["/images/tikkle-1.png", "/images/tikkle-2.png"],
       troubleshooting: [
         {
@@ -92,7 +92,7 @@ const ProjectDetail = () => {
         github: "https://github.com/hy2min/nost_service",
         demo: "",
       },
-      image: "/images/nost-cover.png",
+      image: "/src/assets/nost_main.png",
       gallery: [
         "/src/assets/nost_main.png",
         "/src/assets/nost_create1.png",
@@ -138,8 +138,8 @@ const ProjectDetail = () => {
         demo: "",
       },
       video: "https://www.youtube.com/embed/Hbl3lOcMKS4",
-      image: "/images/drug-cover.png",
-      gallery: ["/images/drug-1.png"],
+      image: "/images/drug_screen.png",
+      gallery: ["/images/guide_drug.gif", "/images/guide_mind.gif"],
       troubleshooting: [
         {
           category: "한글 PDF 파싱 인코딩",
@@ -200,8 +200,12 @@ const ProjectDetail = () => {
         demo: "",
       },
       video: "https://www.youtube.com/embed/PciBxQA3SzQ",
-      image: "/images/otter-cover.png",
-      gallery: ["/images/otter-1.png", "/images/otter-2.png"],
+      image: "/images/ottereview_screen.png",
+      gallery: [
+        "/images/guide_repolist.gif",
+        "/images/guide_prcreate.gif",
+        "/images/guide_collabo.gif",
+      ],
       troubleshooting: [
         {
           category: "연결 실패(음성 채팅) - WebRTC / Audio Chat",
@@ -278,7 +282,6 @@ const ProjectDetail = () => {
         "Redis",
         "Kafka",
         "AWS S3 + EventBridge",
-        "FFmpeg (Jaffree)",
         "Docker Compose",
       ],
       roles: [
@@ -298,7 +301,7 @@ const ProjectDetail = () => {
         github: "https://github.com/hy2min/orakgarak",
         demo: "",
       },
-      image: "/images/orak-cover.png",
+      image: "/images/orakgarak_screen.png",
       gallery: [
         "/images/orak-1.png",
         "/images/orak-2.png",
@@ -326,6 +329,133 @@ const ProjectDetail = () => {
           cause: "멀티 리포 구성, 단일 소스 오브 트루스 부재",
           solution: "스키마 공유 패키지 제안, CI 스키마 검증 단계",
           reference: "ARCHITECTURE.md와 다중 폴더 구조",
+        },
+      ],
+    },
+    {
+      id: 6,
+      slug: "ouroboros",
+      title: "Ouroboros – OpenAPI 명세서 관리 & Mock Server",
+      summary:
+        "OpenAPI 3.1.0 기반 REST API 명세서 작성부터 Mock Server, 테스트, 성능 분석까지 지원하는 통합 개발 라이브러리.",
+      description:
+        "Java Spring Boot + React 기반의 API 개발 생명주기를 지원하는 오픈소스 라이브러리입니다. OpenAPI 3.1.0 스펙을 준수하며, 웹 UI를 통해 API 명세서를 작성하고 Mock Server를 자동 생성합니다. 백엔드 구현 시 명세서와의 일치 여부를 자동 검증하며, 메서드 레벨 성능 추적 및 N+1 쿼리 감지 기능을 제공합니다. DataFaker를 활용한 동적 Mock 데이터 생성과 WebSocket/STOMP 명세서 관리도 지원합니다.",
+      tech: [
+        "Java",
+        "Spring Boot",
+        "React",
+        "TypeScript",
+        "OpenAPI 3.1.0",
+        "DataFaker",
+        "WebSocket",
+        "STOMP",
+      ],
+      roles: [
+        "React + TypeScript 기반 웹 UI 전면 개발 및 아키텍처 설계",
+        "OpenAPI 명세서 작성/편집 인터페이스 및 실시간 미리보기 기능 구현",
+        "Mock Server 테스트 인터페이스 및 Request/Response 스키마 관리 UI 개발",
+        "Call Trace 성능 추적 시각화 및 트리 구조 자동 확장 기능 구현",
+        "코드 스니펫 생성 기능 및 다국어 지원 인증 처리",
+        "WebSocket/STOMP 명세서 관리 UI 및 실시간 상태 동기화 구현",
+        "JSON 에디터 통합 및 사용자 경험 최적화",
+      ],
+      features: [
+        "OpenAPI 3.1.0 기반 API 명세서 작성 및 관리",
+        "자동 Mock Server 생성 및 DataFaker 기반 동적 데이터 생성",
+        "명세서와 구현 코드 자동 검증(@ApiState 어노테이션 기반)",
+        "메서드 레벨 성능 추적 및 타임라인 시각화",
+        "N+1 쿼리 문제 자동 감지 및 보고",
+        "WebSocket/STOMP 명세서 관리 및 테스트",
+        "외부 OpenAPI 파일(YAML) import 및 변환",
+      ],
+      links: {
+        github: "https://github.com/whitesnakegang/ouroboros",
+        demo: "https://ouroboros.co.kr",
+      },
+      image: "/images/ouroboros_screen.png",
+      gallery: [
+        "/images/ouroboros_screen.png",
+        "/images/rest-work-flow.gif",
+        "/images/websocket-workflow.gif",
+        "/images/method-test-results.gif",
+      ],
+      troubleshooting: [
+        {
+          category: "Call Trace 트리 구조 자동 경로 탐색 및 확장",
+          problem:
+            "Call Trace 모달에서 특정 메서드를 클릭했을 때, 해당 span이 트리 깊숙이 있어 사용자가 수동으로 부모 노드들을 모두 확장해야 하는 UX 문제가 발생했습니다. 깊이가 5단계 이상인 경우 사용자가 여러 번 클릭해야 하는 불편함이 있었습니다.",
+          cause:
+            "중첩된 트리 구조에서 특정 노드를 찾고, 루트부터 해당 노드까지의 모든 경로를 자동으로 확장하는 로직이 없었습니다. React의 상태 관리만으로는 트리 구조의 동적 확장을 효율적으로 처리하기 어려웠습니다.",
+          solution:
+            "재귀적 깊이 우선 탐색(DFS) 알고리즘을 구현하여 `findSpanPath` 함수를 개발했습니다. 이 함수는 `spanId`로 대상 노드를 찾으면서 경로를 누적하고, 타겟을 발견하면 전체 경로를 반환합니다. 찾은 경로를 `Set<string>`으로 변환하여 React state로 관리하고, 모든 부모 노드를 한 번에 자동 확장하도록 구현했습니다. 또한 `initialExpandedSpanId`가 변경될 때만 경로 탐색 및 확장 로직을 실행하여 불필요한 재계산을 방지했습니다. 트리 깊이가 깊을 경우를 대비해 early return과 path 배열 spread 최소화로 성능을 최적화했습니다.",
+          reference:
+            "front/src/features/spec/components (Call Trace 관련 컴포넌트), DFS 알고리즘 구현",
+        },
+        {
+          category: "React 모달 상태 기반 조건부 데이터 리프레시 패턴",
+          problem:
+            "스키마를 생성한 후 Request/Response 스키마 선택 모달을 열어도 새로 생성된 스키마가 목록에 표시되지 않는 문제가 있었습니다. 사용자는 모달을 닫았다가 다시 열거나 페이지를 새로고침해야만 최신 데이터를 볼 수 있었습니다.",
+          cause:
+            "컴포넌트 마운트 시점에만 API 호출을 하면, 모달이 열리는 시점의 최신 데이터를 보장할 수 없었습니다. 스키마 생성과 모달 열기가 다른 컴포넌트에서 발생하여 상태 동기화가 어려웠습니다.",
+          solution:
+            "모달 상태(`isSchemaModalOpen`)를 dependency로 사용하는 useEffect 패턴을 적용했습니다. 모달이 열릴 때(`isOpen === true`)마다 데이터를 다시 로드하도록 구현하여, 데이터 일관성을 보장하고 stale data 문제를 해결했습니다. 이를 통해 사용자 경험을 개선하고 명시적 새로고침 버튼 없이도 최신 데이터를 제공할 수 있게 되었습니다. 불필요한 API 호출을 방지하기 위해 모달 상태가 실제로 변경될 때만 실행되도록 dependency 배열을 관리했습니다.",
+          reference:
+            "front/src/features/spec/components (스키마 모달 관련 컴포넌트), useEffect 패턴 최적화",
+        },
+        {
+          category: "FormDataBodyForm 무한 업데이트 루프 해결",
+          problem:
+            "FormDataBodyForm 컴포넌트에서 `Maximum update depth exceeded` 에러가 발생하고 브라우저가 응답하지 않는 문제가 있었습니다. 사용자가 폼 필드를 수정하려고 하면 즉시 브라우저가 멈추는 현상이 발생했습니다.",
+          cause:
+            "useEffect에서 `formData`가 변경될 때마다 `onChange`를 호출하고, `onChange`가 부모 컴포넌트의 상태를 변경하여 다시 `value` prop으로 전달되었습니다. `value` prop이 변경되면 다시 useEffect가 실행되어 무한 루프가 발생했습니다. React의 상태 업데이트 사이클이 끊기지 않아 컴포넌트가 계속 리렌더링되었습니다.",
+          solution:
+            "useRef를 사용하여 이전 값을 추적하는 `prevValueRef`를 구현했습니다. 실제로 값이 변경되었을 때만 업데이트하도록 조건을 추가하고, `handleFormDataChange`에서 `useEffect` 대신 직접 `onChange`를 호출하도록 변경했습니다. 이를 통해 상태 업데이트 사이클을 끊고, 사용자 입력이 부모 컴포넌트로 정확히 전달되도록 했습니다. 무한 루프 문제를 완전히 해결하여 FormDataBodyForm이 정상적으로 작동하게 되었습니다.",
+          reference:
+            "front/src/features/testing/components/RequestBodyForm.tsx, FormDataBodyForm 컴포넌트, useRef를 활용한 상태 관리 최적화",
+        },
+        {
+          category: "Node.js 전용 라이브러리 브라우저 호환성 문제",
+          problem:
+            "코드 스니펫 생성 기능을 위해 `openapi-snippet` 라이브러리를 사용했으나, 브라우저에서 `Module 'stream' has been externalized for browser compatibility`, `global is not defined` 등의 에러가 발생했습니다. 라이브러리가 전혀 작동하지 않아 fallback 함수만 사용해야 했습니다.",
+          cause:
+            "`openapi-snippet`은 Node.js 환경을 가정하고 설계된 라이브러리로, 내부적으로 `httpsnippet`을 사용하며 이는 Node.js 전용 모듈(`stream`, `string_decoder`, `qs` 등)에 의존합니다. 브라우저 환경에는 이러한 Node.js 내장 모듈이 존재하지 않으며, Vite는 기본적으로 Node.js 모듈을 브라우저 번들에서 제외합니다.",
+          solution:
+            "`vite-plugin-node-polyfills`를 설치하고 Vite 설정에 추가하여 Node.js 모듈을 브라우저에서 사용할 수 있도록 폴리필을 제공했습니다. `global` 변수를 `window`로 매핑하고, `process.env`를 빈 객체로 정의하여 Node.js 전용 변수들을 브라우저 환경에 맞게 변환했습니다. 또한 openapi-snippet 실패 시 기존 템플릿 방식으로 자동 전환하는 fallback 함수를 유지하여 안정성을 확보했습니다. 이를 통해 브라우저에서 openapi-snippet이 정상 작동하며, 다국어 문자 및 복잡한 스키마 구조도 지원하게 되었습니다.",
+          reference:
+            "front/vite.config.ts, front/src/features/spec/components/CodeSnippetPanel.tsx, vite-plugin-node-polyfills 통합",
+        },
+        {
+          category: "Basic Auth 다국어 문자 Base64 인코딩 처리",
+          problem:
+            "Basic Auth 미리보기에서 한국어, 일본어 등 다국어 문자를 입력하면 `InvalidCharacterError: The string to be encoded contains characters outside of the Latin1 range` 에러가 발생하고 컴포넌트 렌더링이 즉시 깨지는 문제가 있었습니다.",
+          cause:
+            "`btoa()` 함수는 ASCII 문자만 처리할 수 있도록 설계되어 있습니다. UTF-8 문자(한국어, 일본어, 중국어 등)를 직접 `btoa()`에 전달하면 `InvalidCharacterError`가 발생합니다. Basic Auth의 Authorization 헤더는 `username:password`를 Base64로 인코딩해야 하는데, 다국어 문자를 처리할 수 없었습니다.",
+          solution:
+            "UTF-8 문자열을 Base64로 안전하게 인코딩하는 `safeBase64` 함수를 구현했습니다. `encodeURIComponent`로 UTF-8 문자열을 URL 인코딩한 후, `unescape`로 바이트 문자열로 변환하고, 마지막으로 `btoa`로 Base64 변환하는 3단계 프로세스를 적용했습니다. 에러 발생 시 `null`을 반환하고 `??` 연산자로 fallback 메시지를 표시하여 컴포넌트가 깨지지 않도록 방어 코드를 추가했습니다. 이를 통해 다국어 문자를 포함한 username/password도 정상적으로 Base64 인코딩되며, 컴포넌트 렌더링 오류가 방지되었습니다.",
+          reference:
+            "front/src/features/spec/components/ApiRequestCard.tsx, safeBase64 함수, UTF-8 인코딩 처리",
+        },
+        {
+          category: "JSON 편집기 사용자 경험 개선",
+          problem:
+            "JSON 입력 폼에서 자동 들여쓰기가 작동하지 않고, Tab 키를 눌러도 들여쓰기가 되지 않았습니다. 구문 강조, 라인 번호, 자동 완성 등 코드 편집 기능이 전혀 없어 사용자가 수동으로 JSON을 포맷팅해야 했습니다. 특히 중첩된 객체나 배열을 편집할 때 매우 불편했습니다.",
+          cause:
+            "기본 `textarea` 요소는 코드 편집 기능이 제한적입니다. JSON 편집 시 들여쓰기, 구문 강조, 자동 완성 등의 기능이 필요하나, 여러 위치에서 JSON 입력이 필요하여 일관된 편집 경험을 제공하기 어려웠습니다.",
+          solution:
+            "`react-ace`와 `ace-builds` 패키지를 설치하고 `JsonEditor` 공통 컴포넌트를 생성했습니다. JSON 모드, 다크 모드 자동 감지 및 테마 전환(monokai/github), 자동 완성, 라인 번호, 코드 폴딩 등 코드 에디터 수준의 기능을 제공했습니다. `RequestBodyForm.tsx`와 `SpecForm.tsx`에 적용하여 일관된 JSON 편집 경험을 제공했습니다. 이를 통해 JSON 편집 편의성이 크게 향상되었고, 사용자가 코드 에디터 수준의 기능을 사용할 수 있게 되었습니다.",
+          reference:
+            "front/src/components/JsonEditor.tsx, front/src/features/testing/components/RequestBodyForm.tsx, react-ace 통합",
+        },
+        {
+          category: "WebSocket 작업 완료 토글 반응성 최적화",
+          problem:
+            "WebSocket 명세서의 '작업 완료' 토글을 클릭해도 즉시 반응하지 않고, 토글이 멈춰있는 것처럼 보이며 몇 초 후에야 상태가 변경되었습니다. 사용자가 여러 번 클릭하게 되어 UX 문제가 발생했습니다.",
+          cause:
+            "토글 클릭 시 여러 비동기 작업이 순차적으로 실행되었습니다: `updateWebSocketOperation` API 호출 → `loadWebSocketOperationData` 데이터 다시 로드 → `loadEndpoints` 사이드바 목록 다시 로드(시간이 오래 걸림) → `setSelectedEndpoint` 상태 업데이트. `localProgress` 상태를 즉시 업데이트했지만, `selectedEndpoint` 변경 시 `useEffect`가 `localProgress`를 다시 초기화하여 즉시 반영되지 않았습니다.",
+          solution:
+            "`isUpdatingProgressRef` 플래그를 추가하여 progress 업데이트 중인지 추적하도록 했습니다. 토글 핸들러에서 즉시 `localProgress`를 업데이트하고 플래그를 `true`로 설정한 후, 백그라운드에서 비동기 작업을 수행했습니다. `useEffect`에서 업데이트 중일 때는 `localProgress`를 덮어쓰지 않도록 조건을 추가했습니다. `loadEndpoints()`는 `await`하지 않고 백그라운드에서 실행하여 토글 반응성에 영향을 주지 않도록 했습니다. 모든 작업 완료 후 플래그를 `false`로 리셋하여 이후 `selectedEndpoint` 변경 시에만 `localProgress`가 동기화되도록 구현했습니다. 이를 통해 토글 클릭 시 즉시 UI가 반영되고, 사용자 경험이 크게 개선되었습니다.",
+          reference:
+            "front/src/features/spec/components/ApiEditorLayout.tsx, progress 토글 핸들러, 비동기 상태 관리 최적화",
         },
       ],
     },
@@ -398,7 +528,7 @@ const ProjectDetail = () => {
         >
           <div className="inline-flex items-center justify-center mb-4">
             <span className="px-4 py-1.5 rounded-full text-sm font-bold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-              💼 Project Detail
+              Project Detail
             </span>
           </div>
 
@@ -427,8 +557,8 @@ const ProjectDetail = () => {
                 e.target.nextSibling.style.display = "flex";
               }}
             />
-            <div className="hidden w-full h-full bg-gray-100 dark:bg-gray-800 items-center justify-center text-gray-400 dark:text-gray-300 text-8xl">
-              🖼️
+            <div className="hidden w-full h-full bg-gray-100 dark:bg-gray-800 items-center justify-center text-gray-400 dark:text-gray-300 text-2xl">
+              이미지를 불러올 수 없습니다
             </div>
           </div>
 
@@ -593,7 +723,19 @@ const ProjectDetail = () => {
               <div className="mb-12">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-xl bg-gray-900 dark:bg-white flex items-center justify-center">
-                    <span className="text-xl">🖼️</span>
+                    <svg
+                      className="w-6 h-6 text-white dark:text-gray-900"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
                   </div>
                   <h3 className="text-2xl font-black text-gray-900 dark:text-white">
                     프로젝트 갤러리
@@ -615,8 +757,8 @@ const ProjectDetail = () => {
                           e.target.nextSibling.style.display = "flex";
                         }}
                       />
-                      <div className="hidden w-full h-64 bg-gray-100 dark:bg-gray-800 items-center justify-center text-gray-400 dark:text-gray-300 text-6xl">
-                        🖼️
+                      <div className="hidden w-full h-64 bg-gray-100 dark:bg-gray-800 items-center justify-center text-gray-400 dark:text-gray-300 text-sm">
+                        이미지를 불러올 수 없습니다
                       </div>
                       {/* 호버 시 확대 아이콘 */}
                       <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
