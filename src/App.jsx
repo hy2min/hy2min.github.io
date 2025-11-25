@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -9,32 +9,43 @@ import Contact from "./components/Contact";
 import SiteHeader from "./components/layout/SiteHeader.tsx";
 import SiteFooter from "./components/layout/SiteFooter.tsx";
 import ProjectDetail from "./components/ProjectDetail";
+import PDFExportPage from "./components/PDFExportPage";
 // Replaced floating ThemeToggle with header toggle
 import { ThemeProvider } from "./contexts/ThemeContext";
+
+function AppContent() {
+  const location = useLocation();
+  const isPDFPage = location.pathname === "/pdf";
+
+  return (
+    <div className="min-h-screen bg-[rgb(var(--bg))] text-[rgb(var(--fg))] transition-colors">
+      {!isPDFPage && <SiteHeader />}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Hero />
+              <Projects />
+              <About />
+              <Skills />
+              <Contact />
+              <SiteFooter />
+            </>
+          }
+        />
+        <Route path="/projects/:slug" element={<ProjectDetail />} />
+        <Route path="/pdf" element={<PDFExportPage />} />
+      </Routes>
+    </div>
+  );
+}
 
 function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
-        <div className="min-h-screen bg-[rgb(var(--bg))] text-[rgb(var(--fg))] transition-colors">
-          <SiteHeader />
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-                  <Hero />
-                  <Projects />
-                  <About />
-                  <Skills />
-                  <Contact />
-                  <SiteFooter />
-                </>
-              }
-            />
-            <Route path="/projects/:slug" element={<ProjectDetail />} />
-          </Routes>
-        </div>
+        <AppContent />
       </BrowserRouter>
     </ThemeProvider>
   );

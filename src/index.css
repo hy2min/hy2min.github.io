@@ -189,3 +189,99 @@ html {
 .bg-grid {
   animation: grid-move 20s linear infinite;
 }
+
+/* PDF 출력용 인쇄 스타일 */
+@media print {
+  /* 페이지 설정 */
+  @page {
+    size: A4;
+    margin: 1.5cm;
+  }
+
+  /* 페이지 브레이크 */
+  .page-break {
+    page-break-before: always;
+  }
+
+  .no-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* 숨김 요소 */
+  .print-hidden {
+    display: none !important;
+  }
+
+  /* 배경색 제거 (잉크 절약) */
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+
+  /* 링크 스타일 */
+  a {
+    color: #000 !important;
+    text-decoration: underline !important;
+  }
+
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+
+  /* 이미지 최적화 */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+  }
+
+  /* 테이블 및 리스트 */
+  table,
+  ul,
+  ol {
+    page-break-inside: avoid;
+  }
+
+  /* 헤더/푸터 제거 */
+  header,
+  footer,
+  nav {
+    display: none !important;
+  }
+
+  /* 섹션 간격 조정 */
+  section {
+    page-break-inside: avoid;
+    margin-bottom: 1.5cm;
+  }
+
+  /* 프로젝트 카드 */
+  .project-card {
+    page-break-inside: avoid;
+    margin-bottom: 1cm;
+  }
+
+  /* 버튼 스타일 조정 */
+  button,
+  .btn {
+    border: 1px solid #000 !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  /* 다크 모드 비활성화 */
+  .dark {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* 애니메이션 비활성화 */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
