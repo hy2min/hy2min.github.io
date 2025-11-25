@@ -93,11 +93,11 @@ const detailedProjects = [
       github: "https://github.com/hy2min/nost_service",
       demo: "",
     },
-    image: "/src/assets/nost_main.png",
+    image: "/images/nost_main.png",
     gallery: [
-      "/src/assets/nost_main.png",
-      "/src/assets/nost_create1.png",
-      "/src/assets/nost_create2.png",
+      "/images/nost_main.png",
+      "/images/nost_create1.png",
+      "/images/nost_create2.png",
     ],
     troubleshooting: [
       {

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import type { ProjectCardProps } from '../../lib/adapters/projectAdapter';
 
 export default function ProjectCard({ title, summary, stacks, cover, links, badges, slug }: ProjectCardProps) {
@@ -99,15 +100,15 @@ export default function ProjectCard({ title, summary, stacks, cover, links, badg
             {title}
           </h3>
           {slug && (
-            <a
-              href={`/projects/${slug}`}
+            <Link
+              to={`/projects/${slug}`}
               className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-900 dark:hover:bg-white hover:text-white dark:hover:text-gray-900 hover:scale-110 transition-all"
               aria-label={`View details for ${title}`}
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </a>
+            </Link>
           )}
         </div>
 
