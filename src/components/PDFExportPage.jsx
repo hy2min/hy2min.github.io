@@ -471,7 +471,12 @@ const PDFExportPage = () => {
 
     setIsGenerating(true);
     try {
-      // 1. 모든 애니메이션이 완료될 때까지 대기 (최대 지연 시간 고려)
+      // 0. 스크롤을 맨 위로 이동
+      window.scrollTo(0, 0);
+      contentRef.current.scrollIntoView({ behavior: "instant", block: "start" });
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      // 1. 모든 애니메이션이 완료될 때까지 대기
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // 2. 모든 이미지가 로드될 때까지 대기
@@ -498,17 +503,35 @@ const PDFExportPage = () => {
       // 3. 추가 대기 (안정화)
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // 4. 페이지 전체를 캡처 (애니메이션 제거)
-      const canvas = await html2canvas(contentRef.current, {
+      // 4. 컨텐츠의 실제 크기 계산
+      const element = contentRef.current;
+      const rect = element.getBoundingClientRect();
+      const width = element.scrollWidth || rect.width;
+      const height = element.scrollHeight || rect.height;
+
+      // 5. 페이지 전체를 캡처 (정확한 크기 지정)
+      const canvas = await html2canvas(element, {
         scale: 2,
+        width: width,
+        height: height,
         useCORS: true,
         logging: false,
         backgroundColor: "#ffffff",
-        removeContainer: true,
+        removeContainer: false,
+        windowWidth: width,
+        windowHeight: height,
+        x: 0,
+        y: 0,
+        scrollX: 0,
+        scrollY: 0,
         onclone: (clonedDoc) => {
           // 클론된 문서에서 애니메이션과 transition 제거
           const clonedElement = clonedDoc.querySelector(".pdf-export-page");
           if (clonedElement) {
+            // 스크롤 위치 초기화
+            clonedDoc.documentElement.scrollTop = 0;
+            clonedDoc.body.scrollTop = 0;
+            
             // 모든 요소의 애니메이션과 transition 제거
             const allElements = clonedElement.querySelectorAll("*");
             allElements.forEach((el) => {
@@ -526,34 +549,74 @@ const PDFExportPage = () => {
               el.style.opacity = "1";
               el.style.transform = "translateY(0)";
             });
+
+            // 고정된 요소들 숨기기 (PDF 버튼 등)
+            const fixedElements = clonedElement.querySelectorAll(".print-hidden, .fixed");
+            fixedElements.forEach((el) => {
+              el.style.display = "none";
+            });
+
+            // 링크 버튼들 숨기기 (PDF에서 작동하지 않으므로)
+            const linkButtons = clonedElement.querySelectorAll(".pdf-link-buttons, a[href^='http'], a[href^='mailto']");
+            linkButtons.forEach((el) => {
+              // 부모 요소가 pdf-link-buttons인 경우만 숨김 (프로젝트 링크 버튼)
+              if (el.classList.contains("pdf-link-buttons") || el.closest(".pdf-link-buttons")) {
+                el.style.display = "none";
+              }
+              // Contact 섹션의 링크 카드들 숨기기
+              if (el.closest("#contact")) {
+                el.style.display = "none";
+              }
+            });
           }
         },
       });
 
-      const imgData = canvas.toDataURL("image/png");
+      const imgData = canvas.toDataURL("image/png", 1.0);
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
         format: "a4",
+        compress: true,
       });
 
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 297; // A4 height in mm
+      const pdfWidth = 210; // A4 width in mm
+      const pdfHeight = 297; // A4 height in mm
+      const pdfPageHeight = pdfHeight - 20; // 여백 고려 (위아래 각 10mm)
+      const imgWidth = pdfWidth - 20; // 좌우 여백 각 10mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
+      let position = -10; // 첫 페이지 여백 고려
       let heightLeft = imgHeight;
 
-      let position = 0;
-
       // 첫 페이지 추가
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+      pdf.addImage(
+        imgData,
+        "PNG",
+        10, // 왼쪽 여백
+        position,
+        imgWidth,
+        imgHeight,
+        undefined,
+        "FAST"
+      );
+      heightLeft -= pdfPageHeight;
 
       // 여러 페이지로 나누기
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
+      while (heightLeft > 0) {
+        position = position - pdfPageHeight + (heightLeft - imgHeight);
         pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+        pdf.addImage(
+          imgData,
+          "PNG",
+          10, // 왼쪽 여백
+          position,
+          imgWidth,
+          imgHeight,
+          undefined,
+          "FAST"
+        );
+        heightLeft -= pdfPageHeight;
       }
 
       // PDF 다운로드
@@ -621,10 +684,15 @@ const PDFExportPage = () => {
       </div>
 
       {/* 컨텐츠 영역 */}
-      <div ref={contentRef}>
+      <div ref={contentRef} className="w-full">
       {/* PDF 출력용 스타일 */}
       <style>{`
         /* PDF 캡처 시 애니메이션 비활성화 */
+        .pdf-export-page {
+          width: 100% !important;
+          overflow: visible !important;
+        }
+        
         .pdf-export-page * {
           animation: none !important;
           transition: none !important;
@@ -635,10 +703,23 @@ const PDFExportPage = () => {
           transform: translateY(0) !important;
         }
         
+        /* 이미지가 제대로 로드되도록 */
+        .pdf-export-page img {
+          max-width: 100% !important;
+          height: auto !important;
+          object-fit: cover !important;
+        }
+        
+        /* PDF에서 링크 버튼 숨김 */
+        .pdf-export-page .pdf-link-buttons {
+          display: none !important;
+        }
+        
         @media print {
           .pdf-export-page {
             padding: 0;
             margin: 0;
+            width: 100% !important;
           }
           
           .page-break {
@@ -889,8 +970,8 @@ const PDFExportPage = () => {
                       </div>
                     )}
 
-                  {/* 액션 버튼 */}
-                  <div className="flex flex-wrap gap-4 pt-8 border-t-2 border-gray-200 no-break">
+                  {/* 액션 버튼 - PDF에서는 숨김 */}
+                  <div className="pdf-link-buttons flex flex-wrap gap-4 pt-8 border-t-2 border-gray-200 no-break">
                     {project.links.github && (
                       <a
                         href={project.links.github}
