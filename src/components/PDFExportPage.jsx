@@ -3,7 +3,6 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import About from "./About";
 import Skills from "./Skills";
-import Contact from "./Contact";
 
 // ProjectDetail에서 사용하는 상세 프로젝트 데이터
 const detailedProjects = [
@@ -557,16 +556,9 @@ const PDFExportPage = () => {
             });
 
             // 링크 버튼들 숨기기 (PDF에서 작동하지 않으므로)
-            const linkButtons = clonedElement.querySelectorAll(".pdf-link-buttons, a[href^='http'], a[href^='mailto']");
+            const linkButtons = clonedElement.querySelectorAll(".pdf-link-buttons");
             linkButtons.forEach((el) => {
-              // 부모 요소가 pdf-link-buttons인 경우만 숨김 (프로젝트 링크 버튼)
-              if (el.classList.contains("pdf-link-buttons") || el.closest(".pdf-link-buttons")) {
-                el.style.display = "none";
-              }
-              // Contact 섹션의 링크 카드들 숨기기
-              if (el.closest("#contact")) {
-                el.style.display = "none";
-              }
+              el.style.display = "none";
             });
           }
         },
@@ -1020,9 +1012,33 @@ const PDFExportPage = () => {
         </div>
       ))}
 
-      {/* Contact 섹션 */}
+      {/* Contact 섹션 - PDF용 간소화 버전 */}
       <div className="page-break" />
-      <Contact />
+      <section className="py-16 px-4">
+        <div className="max-w-5xl mx-auto text-center">
+          <div className="inline-flex items-center justify-center mb-4">
+            <span className="px-4 py-1.5 rounded-full text-sm font-bold text-gray-700 bg-gray-100 border border-gray-200">
+              Get in Touch
+            </span>
+          </div>
+          
+          <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
+            연락하기
+          </h2>
+          
+          <div className="mt-12 space-y-4">
+            <div className="inline-block px-8 py-6 rounded-2xl bg-gray-100 border-2 border-gray-200">
+              <p className="text-xl font-bold text-gray-900 mb-2">이메일</p>
+              <p className="text-lg text-gray-700">hy1x1mn@gmail.com</p>
+            </div>
+            
+            <div className="inline-block px-8 py-6 rounded-2xl bg-gray-100 border-2 border-gray-200 ml-4">
+              <p className="text-xl font-bold text-gray-900 mb-2">GitHub</p>
+              <p className="text-lg text-gray-700">github.com/hy2min</p>
+            </div>
+          </div>
+        </div>
+      </section>
       </div>
     </div>
   );
