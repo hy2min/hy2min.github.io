@@ -6,23 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>hyemin</title>
     <script>
-      // GitHub Pages SPA redirect - redirects to index.html with path in query
+      // GitHub Pages SPA redirect
+      // Single Page Apps for GitHub Pages
+      // https://github.com/rafgraph/spa-github-pages
+      
       (function() {
         var pathSegmentsToKeep = 0;
         var l = window.location;
-        var redirect = l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+        l.replace(
+          l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+          l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
           l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
           (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-          l.hash;
-        l.replace(redirect);
+          l.hash
+        );
       })();
     </script>
   </head>
   <body>
-    <script>
-      // Redirect to index.html
-      window.location.replace('/index.html' + window.location.search + window.location.hash);
-    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
 

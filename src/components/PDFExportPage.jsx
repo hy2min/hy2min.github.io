@@ -3,6 +3,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import About from "./About";
 import Skills from "./Skills";
+import Contact from "./Contact";
 
 // ProjectDetail에서 사용하는 상세 프로젝트 데이터
 const detailedProjects = [
@@ -92,11 +93,11 @@ const detailedProjects = [
       github: "https://github.com/hy2min/nost_service",
       demo: "",
     },
-    image: "/images/nost_main.png",
+    image: "/src/assets/nost_main.png",
     gallery: [
-      "/images/nost_main.png",
-      "/images/nost_create1.png",
-      "/images/nost_create2.png",
+      "/src/assets/nost_main.png",
+      "/src/assets/nost_create1.png",
+      "/src/assets/nost_create2.png",
     ],
     troubleshooting: [
       {
@@ -201,11 +202,11 @@ const detailedProjects = [
     },
     video: "https://www.youtube.com/embed/PciBxQA3SzQ",
     image: "/images/ottereview_screen.png",
-    gallery: [
-      "/images/guide_repolist.gif",
-      "/images/guide_prcreate.gif",
-      "/images/guide_collabo.gif",
-    ],
+      gallery: [
+        "/images/guide_repolist.gif",
+        "/images/PR작성.gif",
+        "/images/공동편집.gif",
+      ],
     troubleshooting: [
       {
         category: "연결 실패(음성 채팅) - WebRTC / Audio Chat",
@@ -470,12 +471,7 @@ const PDFExportPage = () => {
 
     setIsGenerating(true);
     try {
-      // 0. 스크롤을 맨 위로 이동
-      window.scrollTo(0, 0);
-      contentRef.current.scrollIntoView({ behavior: "instant", block: "start" });
-      await new Promise((resolve) => setTimeout(resolve, 300));
-
-      // 1. 모든 애니메이션이 완료될 때까지 대기
+      // 1. 모든 애니메이션이 완료될 때까지 대기 (최대 지연 시간 고려)
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // 2. 모든 이미지가 로드될 때까지 대기
@@ -502,35 +498,17 @@ const PDFExportPage = () => {
       // 3. 추가 대기 (안정화)
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // 4. 컨텐츠의 실제 크기 계산
-      const element = contentRef.current;
-      const rect = element.getBoundingClientRect();
-      const width = element.scrollWidth || rect.width;
-      const height = element.scrollHeight || rect.height;
-
-      // 5. 페이지 전체를 캡처 (정확한 크기 지정)
-      const canvas = await html2canvas(element, {
+      // 4. 페이지 전체를 캡처 (애니메이션 제거)
+      const canvas = await html2canvas(contentRef.current, {
         scale: 2,
-        width: width,
-        height: height,
         useCORS: true,
         logging: false,
         backgroundColor: "#ffffff",
-        removeContainer: false,
-        windowWidth: width,
-        windowHeight: height,
-        x: 0,
-        y: 0,
-        scrollX: 0,
-        scrollY: 0,
+        removeContainer: true,
         onclone: (clonedDoc) => {
           // 클론된 문서에서 애니메이션과 transition 제거
           const clonedElement = clonedDoc.querySelector(".pdf-export-page");
           if (clonedElement) {
-            // 스크롤 위치 초기화
-            clonedDoc.documentElement.scrollTop = 0;
-            clonedDoc.body.scrollTop = 0;
-            
             // 모든 요소의 애니메이션과 transition 제거
             const allElements = clonedElement.querySelectorAll("*");
             allElements.forEach((el) => {
@@ -548,67 +526,34 @@ const PDFExportPage = () => {
               el.style.opacity = "1";
               el.style.transform = "translateY(0)";
             });
-
-            // 고정된 요소들 숨기기 (PDF 버튼 등)
-            const fixedElements = clonedElement.querySelectorAll(".print-hidden, .fixed");
-            fixedElements.forEach((el) => {
-              el.style.display = "none";
-            });
-
-            // 링크 버튼들 숨기기 (PDF에서 작동하지 않으므로)
-            const linkButtons = clonedElement.querySelectorAll(".pdf-link-buttons");
-            linkButtons.forEach((el) => {
-              el.style.display = "none";
-            });
           }
         },
       });
 
-      const imgData = canvas.toDataURL("image/png", 1.0);
+      const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
         format: "a4",
-        compress: true,
       });
 
-      const pdfWidth = 210; // A4 width in mm
-      const pdfHeight = 297; // A4 height in mm
-      const pdfPageHeight = pdfHeight - 20; // 여백 고려 (위아래 각 10mm)
-      const imgWidth = pdfWidth - 20; // 좌우 여백 각 10mm
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 297; // A4 height in mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
-      let position = -10; // 첫 페이지 여백 고려
       let heightLeft = imgHeight;
 
+      let position = 0;
+
       // 첫 페이지 추가
-      pdf.addImage(
-        imgData,
-        "PNG",
-        10, // 왼쪽 여백
-        position,
-        imgWidth,
-        imgHeight,
-        undefined,
-        "FAST"
-      );
-      heightLeft -= pdfPageHeight;
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
 
       // 여러 페이지로 나누기
-      while (heightLeft > 0) {
-        position = position - pdfPageHeight + (heightLeft - imgHeight);
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
         pdf.addPage();
-        pdf.addImage(
-          imgData,
-          "PNG",
-          10, // 왼쪽 여백
-          position,
-          imgWidth,
-          imgHeight,
-          undefined,
-          "FAST"
-        );
-        heightLeft -= pdfPageHeight;
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
       }
 
       // PDF 다운로드
@@ -676,15 +621,10 @@ const PDFExportPage = () => {
       </div>
 
       {/* 컨텐츠 영역 */}
-      <div ref={contentRef} className="w-full">
+      <div ref={contentRef}>
       {/* PDF 출력용 스타일 */}
       <style>{`
         /* PDF 캡처 시 애니메이션 비활성화 */
-        .pdf-export-page {
-          width: 100% !important;
-          overflow: visible !important;
-        }
-        
         .pdf-export-page * {
           animation: none !important;
           transition: none !important;
@@ -695,23 +635,10 @@ const PDFExportPage = () => {
           transform: translateY(0) !important;
         }
         
-        /* 이미지가 제대로 로드되도록 */
-        .pdf-export-page img {
-          max-width: 100% !important;
-          height: auto !important;
-          object-fit: cover !important;
-        }
-        
-        /* PDF에서 링크 버튼 숨김 */
-        .pdf-export-page .pdf-link-buttons {
-          display: none !important;
-        }
-        
         @media print {
           .pdf-export-page {
             padding: 0;
             margin: 0;
-            width: 100% !important;
           }
           
           .page-break {
@@ -962,8 +889,8 @@ const PDFExportPage = () => {
                       </div>
                     )}
 
-                  {/* 액션 버튼 - PDF에서는 숨김 */}
-                  <div className="pdf-link-buttons flex flex-wrap gap-4 pt-8 border-t-2 border-gray-200 no-break">
+                  {/* 액션 버튼 */}
+                  <div className="flex flex-wrap gap-4 pt-8 border-t-2 border-gray-200 no-break">
                     {project.links.github && (
                       <a
                         href={project.links.github}
@@ -1012,33 +939,9 @@ const PDFExportPage = () => {
         </div>
       ))}
 
-      {/* Contact 섹션 - PDF용 간소화 버전 */}
+      {/* Contact 섹션 */}
       <div className="page-break" />
-      <section className="py-16 px-4">
-        <div className="max-w-5xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center mb-4">
-            <span className="px-4 py-1.5 rounded-full text-sm font-bold text-gray-700 bg-gray-100 border border-gray-200">
-              Get in Touch
-            </span>
-          </div>
-          
-          <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
-            연락하기
-          </h2>
-          
-          <div className="mt-12 space-y-4">
-            <div className="inline-block px-8 py-6 rounded-2xl bg-gray-100 border-2 border-gray-200">
-              <p className="text-xl font-bold text-gray-900 mb-2">이메일</p>
-              <p className="text-lg text-gray-700">hy1x1mn@gmail.com</p>
-            </div>
-            
-            <div className="inline-block px-8 py-6 rounded-2xl bg-gray-100 border-2 border-gray-200 ml-4">
-              <p className="text-xl font-bold text-gray-900 mb-2">GitHub</p>
-              <p className="text-lg text-gray-700">github.com/hy2min</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Contact />
       </div>
     </div>
   );

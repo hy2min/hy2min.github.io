@@ -9,7 +9,7 @@ import Contact from "./components/Contact";
 import SiteHeader from "./components/layout/SiteHeader.tsx";
 import SiteFooter from "./components/layout/SiteFooter.tsx";
 import ProjectDetail from "./components/ProjectDetail";
-import PDFExportPage from "./components/PDFExportPage";
+import PDFLayout from "./components/PDFLayout";
 // Replaced floating ThemeToggle with header toggle
 import { ThemeProvider } from "./contexts/ThemeContext";
 
@@ -35,7 +35,7 @@ function AppContent() {
           }
         />
         <Route path="/projects/:slug" element={<ProjectDetail />} />
-        <Route path="/pdf" element={<PDFExportPage />} />
+        <Route path="/pdf" element={<PDFLayout />} />
       </Routes>
     </div>
   );

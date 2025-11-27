@@ -130,8 +130,8 @@ export const projects: LegacyProject[] = [
     image: "/images/ottereview_screen.png",
     gallery: [
       "/images/guide_repolist.gif",
-      "/images/guide_prcreate.gif",
-      "/images/guide_collabo.gif",
+      "/images/PR작성.gif",
+      "/images/공동편집.gif",
     ],
     tags: ["Frontend", "Backend"],
     category: "Fullstack",
