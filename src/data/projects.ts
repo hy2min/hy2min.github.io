@@ -16,6 +16,63 @@ export type LegacyProject = {
 
 export const projects: LegacyProject[] = [
   {
+    id: 6,
+    slug: "ouroboros",
+    title: "Ouroboros · OpenAPI Specification Management & Mock Server",
+    summary:
+      "OpenAPI 3.1.0 기반 REST API 명세서 관리 및 Mock Server 라이브러리.",
+    description:
+      "Java Spring Boot + React 기반의 API 명세서 작성부터 Mock Server, 테스트, 성능 분석까지 지원하는 통합 개발 도구. OpenAPI 3.1.0 스펙 준수 및 자동 검증 기능 제공.",
+    tech: [
+      "Java",
+      "Spring Boot",
+      "React",
+      "TypeScript",
+      "OpenAPI 3.1.0",
+      "DataFaker",
+    ],
+    links: {
+      github: "https://github.com/whitesnakegang/ouroboros",
+      demo: "https://ouroboros.co.kr",
+    },
+    image: "/images/ouroboros_screen.png",
+    gallery: [
+      "/images/ouroboros_screen.png",
+      "/images/rest-work-flow.gif",
+      "/images/websocket-workflow.gif",
+      "/images/method-test-results.gif",
+    ],
+    tags: ["Frontend"],
+    category: "Frontend",
+  },
+  {
+    id: 4,
+    slug: "otterreview",
+    title: "OtterReview · Live Code Review & Whiteboard",
+    summary:
+      "Yorkie CRDT + tldraw + WebRTC for real-time collaboration and reviews.",
+    description:
+      "React (Vite) + Zustand + Yorkie + tldraw; Spring Boot backend. Live code sharing, whiteboarding, chat, and secure sessions.",
+    tech: [
+      "React",
+      "Zustand",
+      "Yorkie",
+      "tldraw",
+      "OpenVidu",
+      "STOMP",
+      "Spring Boot",
+    ],
+    links: { github: "https://github.com/hy2min/ottereview", demo: "" },
+    image: "/images/ottereview_screen.png",
+    gallery: [
+      "/images/guide_repolist.gif",
+      "/images/PR작성.gif",
+      "/images/공동편집.gif",
+    ],
+    tags: ["Frontend", "Backend"],
+    category: "Fullstack",
+  },
+  {
     id: 5,
     slug: "orakgarak",
     title: "Orakgarak · Vocal Analysis & AI Covers",
@@ -38,6 +95,21 @@ export const projects: LegacyProject[] = [
     image: "/images/orakgarak_screen.png",
     gallery: ["/images/orak-1.png", "/images/orak-2.png", "/images/orak-3.png"],
     tags: ["AI", "Frontend", "Backend"],
+    category: "AI",
+  },
+  {
+    id: 3,
+    slug: "drug-service",
+    title: "Drug Service · RAG-based Medication Guide",
+    summary:
+      "LLM + RAG chatbot for safe medication information and contraindications.",
+    description:
+      "Builds an index from public drug datasets with retrieval chains and reference citations. Backend framework pluggable.",
+    tech: ["LLM", "RAG", "Vector DB", "FastAPI/Django", "OpenAI"],
+    links: { github: "https://github.com/hy2min/drug_service", demo: "" },
+    image: "/images/drug_screen.png",
+    gallery: ["/images/guide_drug.gif", "/images/guide_mind.gif"],
+    tags: ["AI", "Backend"],
     category: "AI",
   },
   {
@@ -93,77 +165,5 @@ export const projects: LegacyProject[] = [
     ],
     tags: ["AI", "Frontend", "Backend"],
     category: "AI",
-  },
-  {
-    id: 3,
-    slug: "drug-service",
-    title: "Drug Service · RAG-based Medication Guide",
-    summary:
-      "LLM + RAG chatbot for safe medication information and contraindications.",
-    description:
-      "Builds an index from public drug datasets with retrieval chains and reference citations. Backend framework pluggable.",
-    tech: ["LLM", "RAG", "Vector DB", "FastAPI/Django", "OpenAI"],
-    links: { github: "https://github.com/hy2min/drug_service", demo: "" },
-    image: "/images/drug_screen.png",
-    gallery: ["/images/guide_drug.gif", "/images/guide_mind.gif"],
-    tags: ["AI", "Backend"],
-    category: "AI",
-  },
-  {
-    id: 4,
-    slug: "otterreview",
-    title: "OtterReview · Live Code Review & Whiteboard",
-    summary:
-      "Yorkie CRDT + tldraw + WebRTC for real-time collaboration and reviews.",
-    description:
-      "React (Vite) + Zustand + Yorkie + tldraw; Spring Boot backend. Live code sharing, whiteboarding, chat, and secure sessions.",
-    tech: [
-      "React",
-      "Zustand",
-      "Yorkie",
-      "tldraw",
-      "OpenVidu",
-      "STOMP",
-      "Spring Boot",
-    ],
-    links: { github: "https://github.com/hy2min/ottereview", demo: "" },
-    image: "/images/ottereview_screen.png",
-    gallery: [
-      "/images/guide_repolist.gif",
-      "/images/PR작성.gif",
-      "/images/공동편집.gif",
-    ],
-    tags: ["Frontend", "Backend"],
-    category: "Fullstack",
-  },
-  {
-    id: 6,
-    slug: "ouroboros",
-    title: "Ouroboros · OpenAPI Specification Management & Mock Server",
-    summary:
-      "OpenAPI 3.1.0 기반 REST API 명세서 관리 및 Mock Server 라이브러리.",
-    description:
-      "Java Spring Boot + React 기반의 API 명세서 작성부터 Mock Server, 테스트, 성능 분석까지 지원하는 통합 개발 도구. OpenAPI 3.1.0 스펙 준수 및 자동 검증 기능 제공.",
-    tech: [
-      "Java",
-      "Spring Boot",
-      "React",
-      "TypeScript",
-      "OpenAPI 3.1.0",
-      "DataFaker",
-    ],
-    links: {
-      github: "https://github.com/whitesnakegang/ouroboros",
-      demo: "https://ouroboros.co.kr",
-    },
-    image: "/images/ouroboros_screen.png",
-    gallery: [
-      "/images/ouroboros_screen.png",
-      "/images/rest-work-flow.gif",
-      "/images/websocket-workflow.gif",
-      "/images/method-test-results.gif",
-    ],
-    tags: ["Frontend"],
-    category: "Frontend",
   },
 ];
