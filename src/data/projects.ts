@@ -47,7 +47,7 @@ export const projects: LegacyProject[] = [
   },
   {
     id: 4,
-    slug: "otterreview",
+    slug: "ottereview",
     title: "OtterReview · Live Code Review & Whiteboard",
     summary:
       "Yorkie CRDT + tldraw + WebRTC for real-time collaboration and reviews.",
@@ -65,7 +65,6 @@ export const projects: LegacyProject[] = [
     links: { github: "https://github.com/hy2min/ottereview", demo: "" },
     image: "/images/ottereview_screen.png",
     gallery: [
-      "/images/guide_repolist.gif",
       "/images/PR작성.gif",
       "/images/공동편집.gif",
     ],
@@ -93,7 +92,7 @@ export const projects: LegacyProject[] = [
     ],
     links: { github: "https://github.com/hy2min/orakgarak", demo: "" },
     image: "/images/orakgarak_screen.png",
-    gallery: ["/images/orak-1.png", "/images/orak-2.png", "/images/orak-3.png"],
+    gallery: [],
     tags: ["AI", "Frontend", "Backend"],
     category: "AI",
   },
@@ -134,7 +133,7 @@ export const projects: LegacyProject[] = [
       demo: "http://tikkle.r-e.kr",
     },
     image: "/images/tikkletikkle_screen.png",
-    gallery: ["/images/tikkle-1.png", "/images/tikkle-2.png"],
+    gallery: [],
     tags: ["Frontend", "Backend", "DevOps"],
     category: "Fullstack",
   },

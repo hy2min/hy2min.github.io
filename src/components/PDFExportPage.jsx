@@ -41,7 +41,7 @@ const detailedProjects = [
       demo: "http://tikkle.r-e.kr",
     },
     image: "/images/tikkletikkle_screen.png",
-    gallery: ["/images/tikkle-1.png", "/images/tikkle-2.png"],
+    gallery: [],
     troubleshooting: [
       {
         category: "모델 입력 스케일 불일치",
@@ -93,11 +93,11 @@ const detailedProjects = [
       github: "https://github.com/hy2min/nost_service",
       demo: "",
     },
-    image: "/src/assets/nost_main.png",
+    image: "/images/nost_main.png",
     gallery: [
-      "/src/assets/nost_main.png",
-      "/src/assets/nost_create1.png",
-      "/src/assets/nost_create2.png",
+      "/images/nost_main.png",
+      "/images/nost_create1.png",
+      "/images/nost_create2.png",
     ],
     troubleshooting: [
       {
@@ -168,7 +168,7 @@ const detailedProjects = [
   },
   {
     id: 4,
-    slug: "otterreview",
+    slug: "ottereview",
     title: "OtterReview – 실시간 코드리뷰 & 화이트보드",
     summary:
       "Yorkie(CRDT) + tldraw + OpenVidu + SockJS/STOMP 기반 실시간 협업 플랫폼.",
@@ -203,7 +203,6 @@ const detailedProjects = [
     video: "https://www.youtube.com/embed/PciBxQA3SzQ",
     image: "/images/ottereview_screen.png",
       gallery: [
-        "/images/guide_repolist.gif",
         "/images/PR작성.gif",
         "/images/공동편집.gif",
       ],
@@ -303,11 +302,7 @@ const detailedProjects = [
       demo: "",
     },
     image: "/images/orakgarak_screen.png",
-    gallery: [
-      "/images/orak-1.png",
-      "/images/orak-2.png",
-      "/images/orak-3.png",
-    ],
+    gallery: [],
     troubleshooting: [
       {
         category: "음성 분석 지연",

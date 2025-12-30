@@ -17,14 +17,12 @@ const projectDetails = {
         problem: "예측치 분산 과대",
         cause: "전처리 불일관",
         solution: "입력 스케일러 고정·검증 단계 추가",
-        reference: "final_pjt_back/requirements.txt(ML 스택), 금융 입력 변수 특성",
       },
       {
         category: "로컬/배포 환경 차이",
         problem: "브랜치별 동작 차이",
         cause: "master(배포) vs release/local(로컬) 분기",
         solution: ".env 프로필 분리·CI 환경 행렬",
-        reference: "README.md(브랜치 안내)",
       },
     ],
   },
@@ -36,18 +34,16 @@ const projectDetails = {
     ],
     troubleshooting: [
       {
-        category: "대용량 텍스트 저장 성능",
-        problem: "본문 저장 시 응답 지연",
-        cause: "단일 모델 직접 저장",
-        solution: "본문 외부 스토리지 분리(S3)·메타데이터 DB 저장 제안",
-        reference: "backend/README.md 구조, 장문 생성 서비스 특성",
-      },
-      {
         category: "이미지 생성 실패율",
         problem: "이미지 실패/429",
         cause: "생성 API 쿼터 초과",
         solution: "큐·쿨다운·리트라이, 사용자별 레이트리밋",
-        reference: "frontend 비동기 호출 구조, 생성형 워크플로우",
+      },
+      {
+        category: "대용량 텍스트 저장 성능",
+        problem: "본문 저장 시 응답 지연",
+        cause: "단일 모델 직접 저장",
+        solution: "본문 외부 스토리지 분리(S3)·메타데이터 DB 저장 제안",
       },
     ],
   },
@@ -59,116 +55,105 @@ const projectDetails = {
     ],
     troubleshooting: [
       {
-        category: "한글 PDF 파싱 인코딩",
-        problem: "EUC-KR 문서 파싱 오류",
-        cause: "전처리 미흡",
-        solution: "UTF-8 강제 변환·예외 처리 파이프라인",
-        reference: "backend/requirements.txt(PDF 관련), 데이터 소스 comprehensive_drug_safety_docs.csv",
-      },
-      {
         category: "RAG 검색 지연",
         problem: "질의 응답 지연",
         cause: "임베딩/벡터 쿼리 대기",
         solution: "Top-K 축소·LRU 캐시·요약 단계 캐시",
-        reference: "backend/app.py 구조",
+      },
+      {
+        category: "한글 PDF 파싱 인코딩",
+        problem: "EUC-KR 문서 파싱 오류",
+        cause: "전처리 미흡",
+        solution: "UTF-8 강제 변환·예외 처리 파이프라인",
       },
       {
         category: "프론트 CORS/배포 환경",
         problem: "API 호출 CORS",
         cause: "프록시/Origin 미설정",
         solution: "프록시/헤더 정합, 빌드 타깃 분리",
-        reference: "frontend/.env.*, index.html",
       },
     ],
     video: "https://www.youtube.com/embed/Hbl3lOcMKS4",
   },
-  otterreview: {
+  ottereview: {
     roles: [
-      "CRDT 연동/문서 키 관리(attach/detach 안정화)",
-      "화이트보드 도구 구성(tldraw)",
+      "CRDT 연동/문서 키 관리(attach/detach 안정화) - yjs 기반",
+      "화이트보드 도구 구성(tldraw + yjs CRDT 동기화)",
       "오디오 룸 토큰/세션 만료 복구",
       "채팅(WS) + 보안헤더/코르스 정리",
     ],
     troubleshooting: [
       {
+        category: "화이트보드 협업 동기화 - 기술 선택 및 진화",
+        problem: "Canvas → 이벤트 로그 → Yorkie 시도 과정에서 동시 편집 충돌, Late join 상태 불일치 지속",
+        cause: "Canvas는 상태 관리 불가, 이벤트 로그는 동시성 병합 규칙 부재, Yorkie는 도형 상태 모델링 추상화 레이어 부재로 직접 설계 필요",
+        solution: "검증된 도형 상태 모델이 있는 TLDraw + Yjs 조합으로 전환, 백엔드에 YjsWebSocketHandler 구현(방별 세션 그룹 관리, BinaryMessage 브로드캐스트)",
+      },
+      {
         category: "연결 실패(음성 채팅) - WebRTC / Audio Chat",
         problem: "세션 연결 불가, 재시도 루프",
         cause: "OpenVidu 토큰 연결 지연·타임아웃",
         solution: "Promise.race 기반 10s 타임아웃, 재시도/에러 상태 관리 추가",
-        reference: "fix: 음성채팅 연결 에러 (815fd912, 2025-08-13), useWebRTC.js 타임아웃 로직",
       },
       {
         category: "참가자 목록 동기화 누락",
         problem: "트랙 소실/유저명 미표시",
         cause: "connectionCreated/Destroyed 이벤트 처리 부재",
         solution: "세션 이벤트 리스너 추가, connectedParticipants 상태 동기화",
-        reference: "useWebRTC.js 이벤트 핸들러 추가",
       },
       {
         category: "채팅룸 진입 안정성",
         problem: "화면 전환 시 세션/소켓 혼선",
         cause: "페이지 단위 초기화 순서 불안정",
         solution: "페이지 가드·소유자 권한 체크, joinSession(roomId) 지연 호출",
-        reference: "fix: chatroom (5fb148d2, 2025-08-15), AudioChatRoomRefactored.jsx",
       },
       {
         category: "BE/인프라 - OpenVidu 환경 불일치",
         problem: "세션 생성 실패",
         cause: "서버/환경변수 미정합, 포트/인증 설정 누락",
         solution: "OpenViduServiceImpl 세션 생성 분리, docker-compose에 openvidu-server:2.31.0 구성, 4443 노출",
-        reference: "openvidu-browser 사용, openvidu-server 도커 정의, OpenViduConfig.java",
       },
       {
         category: "FE 안정화 - 충돌 파일 로딩 실패",
         problem: "PR 상세/충돌 파일 로딩 오류",
         cause: "분기 병합 후 경로·상태 불일치",
         solution: "파일 로딩 로직 보정",
-        reference: "fix: 충돌파일 불러올 코드 수정 (52b7191, 2025-08-17)",
-      },
-      {
-        category: "레이아웃 깨짐/사이즈 문제",
-        problem: "화이트보드/로딩창 UI 이슈",
-        cause: "반응형 스타일 미세 조정 미비",
-        solution: "사이즈/간격 보정",
-        reference: "fix: 화이트보드 사이즈 수정, style: 로딩창 간격 수정 (ca59a10 등)",
       },
     ],
     video: "https://www.youtube.com/embed/PciBxQA3SzQ",
   },
   orakgarak: {
     roles: [
-      "보컬 음역대 분석 게임(Phaser.js) 로직 및 시각화 구현",
-      "AI 커버 생성 UI/비교모드 및 이미지 프리셋 로직 개발",
-      "앨범 CRUD, 피드·댓글·좋아요 API 연동 및 프론트 UI 구성",
-      "프론트엔드 빌드 최적화 및 번들 관리",
+      "프론트엔드 UI/UX 개선: 추천 페이지 텍스트 배치 및 반응형 최적화, 앨범 상세 페이지 작성자 정보 표시 형식 개선",
+      "피드 페이지 레이아웃 개선: Sticky 탭 구현으로 스크롤 중 네비게이션 편의성 향상, backdrop-filter를 활용한 반투명 배경 효과 적용",
+      "Spring Boot 기반 백엔드 앨범 CRUD 기능 구현: AlbumController/AlbumService를 통한 앨범 생성·조회·수정·삭제 API 개발, 트랙 관리 및 권한 검증 로직 구현",
+      "앨범 CRUD, 피드·댓글·좋아요 API 연동 및 프론트엔드 UI 구성",
+      "프론트엔드 빌드 최적화 및 번들 관리, Git LFS를 통한 대용량 파일 관리 체계화",
     ],
     troubleshooting: [
-      {
-        category: "음성 분석 지연",
-        problem: "분석 대기 시간 과다",
-        cause: "Python voice_analysis 파이프라인 단일 처리",
-        solution: "프론트엔드에서 SSE와 폴링을 통한 실시간 상태 업데이트 구현",
-        implementation: "SSE(Server-Sent Events)를 통한 실시간 처리 상태 구독 구현 (`services/api/recordings.ts`의 `subscribeToProcessingStatus` 메서드). `hooks/useRecording.ts`의 `useProcessingStatusStream` 훅으로 SSE 연결 관리. 폴백 전략으로 `useProcessingStatus` 훅에서 `refetchInterval: 3000` 설정하여 주기적 폴링. UI에서 진행률 표시 및 예상 소요 시간 안내",
-        reference: "services/api/recordings.ts (subscribeToProcessingStatus), hooks/useRecording.ts (useProcessingStatusStream, useProcessingStatus)",
-        note: "백엔드의 비동기 큐/배치 처리는 이미 구현되어 있었으며, 프론트엔드에서는 이를 활용한 실시간 상태 업데이트 UI를 구현",
-      },
       {
         category: "프론트 빌드 번들 과대",
         problem: "초기 로딩 지연",
         cause: "Phaser 라이브러리 및 대용량 게임 에셋 포함",
         solution: "코드 스플리팅 및 Phaser 정적 파일 분리",
         implementation: "`vite.config.ts`에서 `manualChunks` 설정으로 vendor(react, react-dom), mui, router 분리. Phaser 라이브러리를 `public/assets/js/phaser.min.js`로 복사하여 정적 파일로 분리하여 초기 번들에서 제외. `build-game.js`와 `compress_bundle.cjs` 스크립트 파일 존재 (게임 번들 빌드 및 압축용). React.lazy를 통한 동적 import 및 라우트 기반 코드 스플리팅",
-        reference: "front/vite.config.ts, front/build-game.js, front/compress_bundle.cjs",
         note: "package.json에 build-game.js와 compress_bundle.cjs 실행 스크립트는 없으나 파일은 존재. 필요시 수동 실행 또는 빌드 파이프라인에 통합 가능",
       },
       {
-        category: "백/프론트 스키마 불일치 리스크",
-        problem: "API 응답 필드 불일치로 인한 런타임 에러 가능성",
-        cause: "백엔드 API 응답과 프론트엔드 타입 정의 간 차이, 외부 API(Spotify, Kakao)와의 속성명 차이",
-        solution: "API 응답 정규화 유틸리티 함수 구현 및 중앙화된 타입 정의",
-        implementation: "`utils/typeHelpers.ts`에 `normalizeAlbum`, `normalizeRecording`, `normalizeSong` 함수 구현. API 서비스 레벨에서 정규화 적용 (`services/api/albums.ts`, `services/api/recordings.ts`, `services/api/songs.ts`). `types/album.ts`, `types/recording.ts` 등 도메인별 타입 정의 중앙 관리. 향후 개선: OpenAPI 스펙 기반 타입 자동 생성 및 CI 검증 파이프라인 구축 제안",
-        reference: "utils/typeHelpers.ts, services/api/albums.ts, services/api/recordings.ts, services/api/songs.ts, types/",
-        note: "정규화 함수로 백엔드 응답과 외부 API 응답의 속성명 차이를 해결. 중복 정규화 방지를 위해 API 서비스 레벨에서 한 번만 적용",
+        category: "Sticky 탭과 헤더 z-index 충돌",
+        problem: "피드 페이지에서 스크롤 시 탭이 사라져 사용자가 탭 전환을 위해 상단으로 이동해야 하는 불편함",
+        cause: "피드 페이지 탭이 일반적인 레이아웃 흐름에 포함되어 스크롤 시 함께 사라짐, 헤더와의 z-index 충돌 가능성",
+        solution: "FeedTabs 컴포넌트에 sticky positioning 적용 및 헤더와의 z-index 충돌 해결",
+        implementation: "FeedTabs 컴포넌트에 `position: sticky`, `top: 80px` (헤더 높이 60px + 여백 20px), `zIndex: 1000` 설정. 헤더의 z-index(1100)보다 낮게 설정하여 겹침 방지. `backdropFilter: blur(20px)`와 반투명 배경(`rgba(26, 26, 46, 0.95)`) 적용으로 시각적 일관성 확보. `isInitialized` 상태를 통한 초기 렌더링 트랜지션으로 깜빡임 방지",
+        note: "스크롤 위치와 관계없이 탭 접근 가능하여 네비게이션 편의성이 크게 향상됨. backdrop-filter는 일부 브라우저 호환성을 고려하여 반투명 배경을 기본으로 적용",
+      },
+      {
+        category: "반응형 레이아웃 오버플로우 문제",
+        problem: "Material-UI Container 컴포넌트가 뷰포트 너비를 초과하여 모바일 환경에서 가로 스크롤 발생",
+        cause: "Material-UI의 기본 Container 설정이 뷰포트 너비를 고려하지 않아 일부 화면 크기에서 오버플로우 발생",
+        solution: "전역 CSS에 max-width 제한 및 Container 설정 조정",
+        implementation: "전역 CSS(`app/index.css`)에 `max-width: 100% !important`, `overflow-x: hidden !important` 적용. FeedPage의 Container에 `maxWidth={false}` 설정 후 내부 Box 컴포넌트로 `maxWidth: 1200px` 제한. 모든 컨테이너를 단일 컬럼으로 강제하는 CSS 규칙 추가 (`MuiContainer-root`, `MuiBox-root`에 `max-width: 100%` 적용)",
+        note: "모든 화면 크기에서 레이아웃이 뷰포트 내에 정확히 맞춰지도록 개선하여 모바일 사용자 경험 향상",
       },
     ],
   },
@@ -188,49 +173,42 @@ const projectDetails = {
         problem: "Call Trace 모달에서 특정 메서드를 클릭했을 때, 해당 span이 트리 깊숙이 있어 사용자가 수동으로 부모 노드들을 모두 확장해야 하는 UX 문제가 발생했습니다.",
         cause: "중첩된 트리 구조에서 특정 노드를 찾고, 루트부터 해당 노드까지의 모든 경로를 자동으로 확장하는 로직이 없었습니다.",
         solution: "DFS 알고리즘을 구현한 `findSpanPath` 함수를 개발하여 대상 노드까지의 전체 경로를 자동으로 찾고, React state로 관리하여 모든 부모 노드를 한 번에 자동 확장하도록 구현했습니다. `initialExpandedSpanId` 변경 시에만 실행하여 성능을 최적화했습니다.",
-        reference: "front/src/features/spec/components (Call Trace 관련 컴포넌트), DFS 알고리즘 구현",
-      },
-      {
-        category: "React 모달 상태 기반 조건부 데이터 리프레시 패턴",
-        problem: "스키마를 생성한 후 모달을 열어도 새로 생성된 스키마가 목록에 표시되지 않는 문제가 있었습니다.",
-        cause: "컴포넌트 마운트 시점에만 API 호출을 하면, 모달이 열리는 시점의 최신 데이터를 보장할 수 없었습니다.",
-        solution: "모달 상태(`isSchemaModalOpen`)를 dependency로 사용하는 useEffect 패턴을 적용하여, 모달이 열릴 때마다 데이터를 다시 로드하도록 구현했습니다. 모달 상태가 실제로 변경될 때만 실행되도록 dependency 배열을 관리하여 불필요한 API 호출을 방지했습니다.",
-        reference: "front/src/features/spec/components (스키마 모달 관련 컴포넌트), useEffect 패턴 최적화",
       },
       {
         category: "FormDataBodyForm 무한 업데이트 루프 해결",
         problem: "FormDataBodyForm 컴포넌트에서 `Maximum update depth exceeded` 에러가 발생하고 브라우저가 응답하지 않는 문제가 있었습니다. 사용자가 폼 필드를 수정하려고 하면 즉시 브라우저가 멈추는 현상이 발생했습니다.",
         cause: "useEffect에서 `formData`가 변경될 때마다 `onChange`를 호출하고, `onChange`가 부모 컴포넌트의 상태를 변경하여 다시 `value` prop으로 전달되었습니다. `value` prop이 변경되면 다시 useEffect가 실행되어 무한 루프가 발생했습니다. React의 상태 업데이트 사이클이 끊기지 않아 컴포넌트가 계속 리렌더링되었습니다.",
         solution: "useRef를 사용하여 이전 값을 추적하는 `prevValueRef`를 구현했습니다. 실제로 값이 변경되었을 때만 업데이트하도록 조건을 추가하고, `handleFormDataChange`에서 `useEffect` 대신 직접 `onChange`를 호출하도록 변경했습니다. 이를 통해 상태 업데이트 사이클을 끊고, 사용자 입력이 부모 컴포넌트로 정확히 전달되도록 했습니다. 무한 루프 문제를 완전히 해결하여 FormDataBodyForm이 정상적으로 작동하게 되었습니다.",
-        reference: "front/src/features/testing/components/RequestBodyForm.tsx, FormDataBodyForm 컴포넌트, useRef를 활용한 상태 관리 최적화",
-      },
-      {
-        category: "Node.js 전용 라이브러리 브라우저 호환성 문제",
-        problem: "코드 스니펫 생성 기능을 위해 `openapi-snippet` 라이브러리를 사용했으나, 브라우저에서 `Module 'stream' has been externalized`, `global is not defined` 등의 에러가 발생했습니다.",
-        cause: "`openapi-snippet`은 Node.js 환경을 가정하고 설계된 라이브러리로, Node.js 전용 모듈(`stream`, `string_decoder`, `qs` 등)에 의존합니다. 브라우저 환경에는 이러한 모듈이 존재하지 않습니다.",
-        solution: "`vite-plugin-node-polyfills`를 설치하고 Vite 설정에 추가하여 Node.js 모듈을 브라우저에서 사용할 수 있도록 폴리필을 제공했습니다. `global` 변수를 `window`로 매핑하고, `process.env`를 빈 객체로 정의하여 브라우저 환경에 맞게 변환했습니다. 실패 시 fallback 함수로 자동 전환하여 안정성을 확보했습니다.",
-        reference: "front/vite.config.ts, front/src/features/spec/components/CodeSnippetPanel.tsx, vite-plugin-node-polyfills 통합",
-      },
-      {
-        category: "Basic Auth 다국어 문자 Base64 인코딩 처리",
-        problem: "Basic Auth 미리보기에서 한국어, 일본어 등 다국어 문자를 입력하면 `InvalidCharacterError`가 발생하고 컴포넌트 렌더링이 깨지는 문제가 있었습니다.",
-        cause: "`btoa()` 함수는 ASCII 문자만 처리할 수 있어 UTF-8 문자를 직접 전달하면 에러가 발생합니다.",
-        solution: "UTF-8 문자열을 Base64로 안전하게 인코딩하는 `safeBase64` 함수를 구현했습니다. `encodeURIComponent` → `unescape` → `btoa` 순서로 3단계 변환 프로세스를 적용하고, 에러 발생 시 fallback 메시지를 표시하여 컴포넌트가 깨지지 않도록 방어 코드를 추가했습니다.",
-        reference: "front/src/features/spec/components/ApiRequestCard.tsx, safeBase64 함수, UTF-8 인코딩 처리",
       },
       {
         category: "JSON 편집기 사용자 경험 개선",
         problem: "JSON 입력 폼에서 자동 들여쓰기가 작동하지 않고, Tab 키를 눌러도 들여쓰기가 되지 않았습니다. 구문 강조, 라인 번호, 자동 완성 등 코드 편집 기능이 전혀 없어 사용자가 수동으로 JSON을 포맷팅해야 했습니다. 특히 중첩된 객체나 배열을 편집할 때 매우 불편했습니다.",
         cause: "기본 `textarea` 요소는 코드 편집 기능이 제한적입니다. JSON 편집 시 들여쓰기, 구문 강조, 자동 완성 등의 기능이 필요하나, 여러 위치에서 JSON 입력이 필요하여 일관된 편집 경험을 제공하기 어려웠습니다.",
         solution: "`react-ace`와 `ace-builds` 패키지를 설치하고 `JsonEditor` 공통 컴포넌트를 생성했습니다. JSON 모드, 다크 모드 자동 감지 및 테마 전환(monokai/github), 자동 완성, 라인 번호, 코드 폴딩 등 코드 에디터 수준의 기능을 제공했습니다. `RequestBodyForm.tsx`와 `SpecForm.tsx`에 적용하여 일관된 JSON 편집 경험을 제공했습니다. 이를 통해 JSON 편집 편의성이 크게 향상되었고, 사용자가 코드 에디터 수준의 기능을 사용할 수 있게 되었습니다.",
-        reference: "front/src/components/JsonEditor.tsx, front/src/features/testing/components/RequestBodyForm.tsx, react-ace 통합",
+      },
+      {
+        category: "Node.js 전용 라이브러리 브라우저 호환성 문제",
+        problem: "코드 스니펫 생성 기능을 위해 `openapi-snippet` 라이브러리를 사용했으나, 브라우저에서 `Module 'stream' has been externalized`, `global is not defined` 등의 에러가 발생했습니다.",
+        cause: "`openapi-snippet`은 Node.js 환경을 가정하고 설계된 라이브러리로, Node.js 전용 모듈(`stream`, `string_decoder`, `qs` 등)에 의존합니다. 브라우저 환경에는 이러한 모듈이 존재하지 않습니다.",
+        solution: "`vite-plugin-node-polyfills`를 설치하고 Vite 설정에 추가하여 Node.js 모듈을 브라우저에서 사용할 수 있도록 폴리필을 제공했습니다. `global` 변수를 `window`로 매핑하고, `process.env`를 빈 객체로 정의하여 브라우저 환경에 맞게 변환했습니다. 실패 시 fallback 함수로 자동 전환하여 안정성을 확보했습니다.",
       },
       {
         category: "WebSocket 작업 완료 토글 반응성 최적화",
         problem: "WebSocket 명세서의 '작업 완료' 토글을 클릭해도 즉시 반응하지 않고, 몇 초 후에야 상태가 변경되어 UX 문제가 발생했습니다.",
         cause: "토글 클릭 시 여러 비동기 작업이 순차적으로 실행되어 지연이 발생했습니다. `localProgress` 상태를 즉시 업데이트했지만, `selectedEndpoint` 변경 시 `useEffect`가 `localProgress`를 다시 초기화하여 즉시 반영되지 않았습니다.",
         solution: "`isUpdatingProgressRef` 플래그를 추가하여 progress 업데이트 중인지 추적하도록 했습니다. 토글 핸들러에서 즉시 `localProgress`를 업데이트하고, `useEffect`에서 업데이트 중일 때는 `localProgress`를 덮어쓰지 않도록 조건을 추가했습니다. `loadEndpoints()`는 백그라운드에서 비동기로 실행하여 토글 반응성에 영향을 주지 않도록 했습니다.",
-        reference: "front/src/features/spec/components/ApiEditorLayout.tsx, progress 토글 핸들러, 비동기 상태 관리 최적화",
+      },
+      {
+        category: "Basic Auth 다국어 문자 Base64 인코딩 처리",
+        problem: "Basic Auth 미리보기에서 한국어, 일본어 등 다국어 문자를 입력하면 `InvalidCharacterError`가 발생하고 컴포넌트 렌더링이 깨지는 문제가 있었습니다.",
+        cause: "`btoa()` 함수는 ASCII 문자만 처리할 수 있어 UTF-8 문자를 직접 전달하면 에러가 발생합니다.",
+        solution: "UTF-8 문자열을 Base64로 안전하게 인코딩하는 `safeBase64` 함수를 구현했습니다. `encodeURIComponent` → `unescape` → `btoa` 순서로 3단계 변환 프로세스를 적용하고, 에러 발생 시 fallback 메시지를 표시하여 컴포넌트가 깨지지 않도록 방어 코드를 추가했습니다.",
+      },
+      {
+        category: "React 모달 상태 기반 조건부 데이터 리프레시 패턴",
+        problem: "스키마를 생성한 후 모달을 열어도 새로 생성된 스키마가 목록에 표시되지 않는 문제가 있었습니다.",
+        cause: "컴포넌트 마운트 시점에만 API 호출을 하면, 모달이 열리는 시점의 최신 데이터를 보장할 수 없었습니다.",
+        solution: "모달 상태(`isSchemaModalOpen`)를 dependency로 사용하는 useEffect 패턴을 적용하여, 모달이 열릴 때마다 데이터를 다시 로드하도록 구현했습니다. 모달 상태가 실제로 변경될 때만 실행되도록 dependency 배열을 관리하여 불필요한 API 호출을 방지했습니다.",
       },
     ],
   },
@@ -487,17 +465,6 @@ const ProjectDetail = () => {
                             {item.solution}
                           </span>
                         </div>
-
-                        {item.reference && (
-                          <div className="flex items-start gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                            <span className="text-xs font-bold text-gray-500 dark:text-gray-500 min-w-[60px]">
-                              근거:
-                            </span>
-                            <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">
-                              {item.reference}
-                            </span>
-                          </div>
-                        )}
 
                         {/* 노트가 있는 경우 */}
                         {item.note && (

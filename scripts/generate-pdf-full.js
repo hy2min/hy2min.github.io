@@ -89,10 +89,12 @@ async function generatePDF() {
       deviceScaleFactor: 2,
     });
 
-    console.log(`📄 페이지 로드: ${pdfUrl}`);
+    // PDF 페이지로 이동
+    const pdfPageUrl = `${pdfUrl}/pdf`;
+    console.log(`📄 PDF 페이지 로드: ${pdfPageUrl}`);
 
     // 페이지 로드
-    await page.goto(pdfUrl, {
+    await page.goto(pdfPageUrl, {
       waitUntil: "networkidle0",
       timeout: 60000,
     });
@@ -105,27 +107,16 @@ async function generatePDF() {
     const pageContent = await page.content();
     console.log(
       "📋 페이지 로드 확인:",
-      pageContent.includes("Hero") || pageContent.includes("projects") ? "성공" : "실패"
+      pageContent.includes("pdf-layout") || pageContent.includes("About Me") ? "성공" : "실패"
     );
 
-    // 모든 섹션이 로드될 때까지 대기
-    console.log("⏳ 전체 페이지 렌더링 대기...");
+    // PDF 레이아웃이 로드될 때까지 대기
+    console.log("⏳ PDF 레이아웃 렌더링 대기...");
     try {
       await page.waitForFunction(
         () => {
-          const hero = document.querySelector("section[id='hero'], section:has(h1)");
-          const projects = document.getElementById("projects");
-          const about = document.getElementById("about");
-          const skills = document.getElementById("skills");
-          const contact = document.getElementById("contact");
-          
-          const hasContent = hero || projects || about || skills || contact;
-          if (hasContent) {
-            const heroHeight = hero?.offsetHeight || 0;
-            const projectsHeight = projects?.offsetHeight || 0;
-            return heroHeight > 100 || projectsHeight > 100;
-          }
-          return false;
+          const pdfLayout = document.querySelector(".pdf-layout");
+          return pdfLayout && pdfLayout.offsetHeight > 100;
         },
         { timeout: 60000, polling: 500 }
       );

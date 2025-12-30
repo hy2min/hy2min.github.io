@@ -16,7 +16,7 @@ const projects = [
   { slug: "tikkletikkle", name: "TikkleTikkle" },
   { slug: "nost", name: "NOST" },
   { slug: "drug-service", name: "Drug Service" },
-  { slug: "otterreview", name: "OtterReview" },
+  { slug: "ottereview", name: "OtterReview" },
   { slug: "ouroboros", name: "Ouroboros" },
 ];
 
