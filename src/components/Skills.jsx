@@ -14,17 +14,14 @@ const groups = [
         <path d="M3 4h18v2H3zM3 18h18v2H3zM3 9h18v6H3z" />
       </svg>
     ),
-    // 보강: TypeScript, React Query, WebRTC 추가
     items: [
-      "TypeScript",
       "React",
+      "TypeScript",
       "Vite",
-      "Tailwind",
+      "Tailwind CSS",
+      "Material-UI",
       "Zustand",
-      "React Query",
-      "React Router",
-      "MUI",
-      "WebRTC",
+      "Framer Motion",
     ],
     gradient: "from-blue-500 to-sky-500",
     color: "blue",
@@ -43,16 +40,18 @@ const groups = [
         <path d="M4 5h16v6H4zM4 13h16v6H4z" />
       </svg>
     ),
-    // 정정: Django 제외, FastAPI·OpenAPI/Swagger·WebSocket 추가
     items: [
       "Spring Boot",
+      "Django",
       "FastAPI",
-      "REST APIs",
-      "OpenAPI/Swagger",
-      "WebSocket",
+      "Python",
+      "Java",
+      "Uvicorn",
+      "Pydantic",
       "PostgreSQL",
       "MySQL",
       "Redis",
+      "OpenAPI",
     ],
     gradient: "from-emerald-500 to-teal-500",
     color: "emerald",
@@ -71,14 +70,13 @@ const groups = [
         <path d="M6 7a6 6 0 1111.31 2.5A4.5 4.5 0 1117.5 19H7a5 5 0 01-1-9.9V9a2 2 0 010-2z" />
       </svg>
     ),
-    // 보강: Docker Compose 추가
     items: [
       "Docker",
-      "Docker Compose",
       "Nginx",
-      "AWS EC2/S3",
-      "GitHub Actions",
-      "CI/CD",
+      "AWS EC2",
+      "AWS S3",
+      "Fly.io",
+      "Vercel",
     ],
     gradient: "from-amber-500 to-orange-500",
     color: "amber",
@@ -97,21 +95,20 @@ const groups = [
         <path d="M12 2a7 7 0 00-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 00-7-7zm0 9a2 2 0 110-4 2 2 0 010 4z" />
       </svg>
     ),
-    // 보강: Pinecone 추가
     items: [
-      "OpenAI API",
+      "OpenAI",
       "LangChain",
-      "RAG",
-      "Vector DB",
+      "LangGraph",
       "Pinecone",
+      "RAGAS",
     ],
     gradient: "from-slate-500 to-gray-500",
     color: "slate",
     proficiency: 70,
   },
   {
-    name: "Collaboration",
-    emoji: "🤝",
+    name: "Collaboration Tools",
+    emoji: "💬",
     icon: (
       <svg
         className="h-6 w-6"
@@ -119,13 +116,13 @@ const groups = [
         fill="currentColor"
         aria-hidden="true"
       >
-        <path d="M12 12a5 5 0 100-10 5 5 0 000 10zM3 20a9 9 0 1118 0v1H3v-1z" />
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
       </svg>
     ),
     items: ["Notion", "Slack", "Figma", "Jira"],
-    gradient: "from-zinc-500 to-stone-500",
-    color: "zinc",
-    proficiency: 75,
+    gradient: "from-purple-500 to-pink-500",
+    color: "purple",
+    proficiency: 80,
   },
 ];
 
