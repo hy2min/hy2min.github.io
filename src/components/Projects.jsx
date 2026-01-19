@@ -24,7 +24,7 @@ const Projects = () => {
           </h2>
 
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            AI, 풀스택, 실시간 협업 분야의 선별된 작업물들입니다. <br />각
+            프론트엔드 중심으로 개발하며, 백엔드 경험과 UI-API 흐름 이해를 바탕으로 한 선별된 작업물들입니다. <br />각
             프로젝트를 통해{" "}
             <span className="font-semibold text-gray-900 dark:text-white">
               문제 해결

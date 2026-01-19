@@ -9,6 +9,10 @@ export type ProjectCardProps = {
   badges?: string[];
   slug?: string;
   category?: 'AI' | 'Front' | 'Back' | 'DevOps' | 'Fullstack';
+  period?: string;
+  teamSize?: number;
+  myRole?: string[];
+  organization?: string;
 };
 
 export function adaptToProjectCard(p: LegacyProject): ProjectCardProps {
@@ -21,6 +25,10 @@ export function adaptToProjectCard(p: LegacyProject): ProjectCardProps {
     badges: p.tags || p.features?.slice(0, 3),
     slug: p.slug,
     category: (p.category as ProjectCardProps['category']) || 'Fullstack',
+    period: p.period,
+    teamSize: p.teamSize,
+    myRole: p.myRole,
+    organization: p.organization,
   };
 }
 

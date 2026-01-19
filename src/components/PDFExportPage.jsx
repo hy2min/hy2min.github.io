@@ -169,7 +169,7 @@ const detailedProjects = [
   {
     id: 4,
     slug: "ottereview",
-    title: "OtterReview – 실시간 코드리뷰 & 화이트보드",
+    title: "OtteReview – 실시간 코드리뷰 & 화이트보드",
     summary:
       "Yorkie(CRDT) + tldraw + OpenVidu + SockJS/STOMP 기반 실시간 협업 플랫폼.",
     description:

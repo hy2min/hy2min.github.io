@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { ProjectCardProps } from '../../lib/adapters/projectAdapter';
 
-export default function ProjectCard({ title, summary, stacks, cover, links, badges, slug }: ProjectCardProps) {
+export default function ProjectCard({ title, summary, stacks, cover, links, badges, slug, period, teamSize, myRole, organization }: ProjectCardProps) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
@@ -115,6 +115,50 @@ export default function ProjectCard({ title, summary, stacks, cover, links, badg
         <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed mb-4">
           {summary}
         </p>
+
+        {/* 프로젝트 메타 (기관/기간/인원/역할) */}
+        {(organization || period || teamSize || (myRole && myRole.length > 0)) && (
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400 font-semibold mb-4">
+            {organization && (
+              <span>
+                <span className="text-gray-700 dark:text-gray-300">기관</span> {organization}
+              </span>
+            )}
+            {period && (
+              <span>
+                <span className="text-gray-700 dark:text-gray-300">기간</span> {period}
+              </span>
+            )}
+            {teamSize && (
+              <span>
+                <span className="text-gray-700 dark:text-gray-300">인원</span> {teamSize}명
+              </span>
+            )}
+            {myRole && myRole.length > 0 && (
+              <span className="flex items-center gap-2">
+                <span className="text-gray-700 dark:text-gray-300">역할</span>
+                <span className="flex flex-wrap gap-1">
+                  {myRole.map((r) => (
+                    <span
+                      key={r}
+                      className={
+                        r === 'FE'
+                          ? 'px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-200 border border-blue-200 dark:border-blue-800'
+                          : r === 'BE'
+                            ? 'px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800'
+                            : r === 'AI'
+                              ? 'px-2 py-0.5 rounded-full bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-200 border border-violet-200 dark:border-violet-800'
+                              : 'px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700'
+                      }
+                    >
+                      {r}
+                    </span>
+                  ))}
+                </span>
+              </span>
+            )}
+          </div>
+        )}
 
         {/* 기술 스택 태그 */}
         <div className="flex flex-wrap gap-2 mb-4">

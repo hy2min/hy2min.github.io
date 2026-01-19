@@ -18,9 +18,9 @@ const About = () => {
         </svg>
       ),
       bullets: [
-        "AI/RAG에 집중하는 풀스택 엔지니어",
-        "실시간 협업 도구 구축을 즐김",
-        "신뢰성과 UX를 중요시",
+        "프론트엔드 개발자로, 백엔드 경험을 통해 API-UI 흐름을 이해하고 설계합니다",
+        "실시간 협업 시스템 구축에 관심",
+        "사용자 경험과 코드 품질을 함께 고려",
       ],
       gradient: "from-blue-500 to-sky-500",
     },
@@ -38,9 +38,9 @@ const About = () => {
         </svg>
       ),
       bullets: [
-        "End-to-end 책임감 (UI → 인프라)",
-        "API 설계 + 데이터 모델링",
-        "Docker/AWS/Nginx로 DevOps",
+        "OpenAPI 기반 API 명세 설계 및 구현",
+        "실시간 협업 아키텍처 설계",
+        "빠른 UI와 견고한 API의 균형을 추구",
       ],
       gradient: "from-slate-500 to-gray-500",
     },
@@ -58,9 +58,9 @@ const About = () => {
         </svg>
       ),
       bullets: [
-        "CRDT 기반 라이브 리뷰 도구 구축",
-        "AI 기반 글쓰기 플랫폼 출시",
-        "AWS에 풀스택 앱 배포",
+        "OpenAPI 3.1.0 명세 관리 도구 개발",
+        "CRDT 기반 실시간 협업 플랫폼 구축",
+        "RAG 기반 AI 서비스 전 스택 구현",
       ],
       gradient: "from-emerald-500 to-teal-500",
     },

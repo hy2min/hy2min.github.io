@@ -2,6 +2,89 @@ import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import { projects as baseProjects } from "../data/projects";
 
+// 기술 스택을 카테고리별로 분류하는 함수
+const categorizeTech = (techArray) => {
+  const categories = {
+    Frontend: [],
+    Backend: [],
+    "DevOps & Cloud": [],
+    "AI & Data": [],
+    "Collaboration Tools": [],
+  };
+
+  const frontendKeywords = [
+    "React", "TypeScript", "Vue.js", "JavaScript", "Vite", "TailwindCSS", "Tailwind",
+    "MUI", "Zustand", "Framer Motion", "Axios", "React Router", "i18next",
+    "CodeMirror", "tldraw", "Vue", "JSX", "CSS", "HTML"
+  ];
+
+  const backendKeywords = [
+    "Java", "Spring Boot", "Spring", "Python", "Django", "FastAPI", "PostgreSQL",
+    "MySQL", "Redis", "OpenAPI", "Spring AOP", "AspectJ", "Spring WebSocket",
+    "Springwolf", "SpringDoc", "DataFaker", "OpenTelemetry", "Gradle", "YAML",
+    "Uvicorn", "Pydantic", "Pydantic"
+  ];
+
+  const devopsKeywords = [
+    "Docker", "docker-compose", "Nginx", "AWS EC2", "AWS S3", "EC2", "S3",
+    "GitHub Actions", "Vercel", "Fly.io", "CI/CD", "AWS"
+  ];
+
+  const aiKeywords = [
+    "OpenAI", "LangChain", "Pinecone", "Whisper", "RAG", "DALL·E", "DALL-E",
+    "DeepL", "LLM", "Vector DB", "Vector"
+  ];
+
+  const collaborationKeywords = [
+    "GitHub API", "STOMP", "SockJS", "WebSocket", "OpenVidu", "Yorkie", "yjs",
+    "WebRTC"
+  ];
+
+  techArray.forEach((tech) => {
+    const techLower = tech.toLowerCase();
+    let categorized = false;
+
+    // Frontend 체크
+    if (frontendKeywords.some(keyword => techLower.includes(keyword.toLowerCase()) || tech === keyword)) {
+      categories.Frontend.push(tech);
+      categorized = true;
+    }
+    // Backend 체크
+    else if (backendKeywords.some(keyword => techLower.includes(keyword.toLowerCase()) || tech === keyword)) {
+      categories.Backend.push(tech);
+      categorized = true;
+    }
+    // DevOps 체크
+    else if (devopsKeywords.some(keyword => techLower.includes(keyword.toLowerCase()) || tech === keyword)) {
+      categories["DevOps & Cloud"].push(tech);
+      categorized = true;
+    }
+    // AI 체크
+    else if (aiKeywords.some(keyword => techLower.includes(keyword.toLowerCase()) || tech === keyword)) {
+      categories["AI & Data"].push(tech);
+      categorized = true;
+    }
+    // Collaboration 체크
+    else if (collaborationKeywords.some(keyword => techLower.includes(keyword.toLowerCase()) || tech === keyword)) {
+      categories["Collaboration Tools"].push(tech);
+      categorized = true;
+    }
+    // 분류되지 않은 경우 Backend에 추가 (기본값)
+    else {
+      categories.Backend.push(tech);
+    }
+  });
+
+  // 빈 카테고리 제거
+  Object.keys(categories).forEach(key => {
+    if (categories[key].length === 0) {
+      delete categories[key];
+    }
+  });
+
+  return categories;
+};
+
 // 프로젝트 상세 정보 (roles, troubleshooting 등)
 const projectDetails = {
   tikkletikkle: {
@@ -35,9 +118,9 @@ const projectDetails = {
     troubleshooting: [
       {
         category: "이미지 생성 실패율",
-        problem: "이미지 실패/429",
+        problem: "이미지 실패/429 에러",
         cause: "생성 API 쿼터 초과",
-        solution: "큐·쿨다운·리트라이, 사용자별 레이트리밋",
+        solution: "큐·쿨다운·리트라이, 사용자별 레이트리밋 구현",
       },
       {
         category: "대용량 텍스트 저장 성능",
@@ -68,7 +151,7 @@ const projectDetails = {
       },
       {
         category: "프론트 CORS/배포 환경",
-        problem: "API 호출 CORS",
+        problem: "API 호출 CORS 에러",
         cause: "프록시/Origin 미설정",
         solution: "프록시/헤더 정합, 빌드 타깃 분리",
       },
@@ -135,25 +218,19 @@ const projectDetails = {
         category: "프론트 빌드 번들 과대",
         problem: "초기 로딩 지연",
         cause: "Phaser 라이브러리 및 대용량 게임 에셋 포함",
-        solution: "코드 스플리팅 및 Phaser 정적 파일 분리",
-        implementation: "`vite.config.ts`에서 `manualChunks` 설정으로 vendor(react, react-dom), mui, router 분리. Phaser 라이브러리를 `public/assets/js/phaser.min.js`로 복사하여 정적 파일로 분리하여 초기 번들에서 제외. `build-game.js`와 `compress_bundle.cjs` 스크립트 파일 존재 (게임 번들 빌드 및 압축용). React.lazy를 통한 동적 import 및 라우트 기반 코드 스플리팅",
-        note: "package.json에 build-game.js와 compress_bundle.cjs 실행 스크립트는 없으나 파일은 존재. 필요시 수동 실행 또는 빌드 파이프라인에 통합 가능",
+        solution: "코드 스플리팅 및 Phaser 정적 파일 분리. `vite.config.ts`에서 `manualChunks` 설정으로 vendor(react, react-dom), mui, router 분리. Phaser 라이브러리를 `public/assets/js/phaser.min.js`로 복사하여 정적 파일로 분리하여 초기 번들에서 제외. React.lazy를 통한 동적 import 및 라우트 기반 코드 스플리팅",
       },
       {
         category: "Sticky 탭과 헤더 z-index 충돌",
         problem: "피드 페이지에서 스크롤 시 탭이 사라져 사용자가 탭 전환을 위해 상단으로 이동해야 하는 불편함",
         cause: "피드 페이지 탭이 일반적인 레이아웃 흐름에 포함되어 스크롤 시 함께 사라짐, 헤더와의 z-index 충돌 가능성",
-        solution: "FeedTabs 컴포넌트에 sticky positioning 적용 및 헤더와의 z-index 충돌 해결",
-        implementation: "FeedTabs 컴포넌트에 `position: sticky`, `top: 80px` (헤더 높이 60px + 여백 20px), `zIndex: 1000` 설정. 헤더의 z-index(1100)보다 낮게 설정하여 겹침 방지. `backdropFilter: blur(20px)`와 반투명 배경(`rgba(26, 26, 46, 0.95)`) 적용으로 시각적 일관성 확보. `isInitialized` 상태를 통한 초기 렌더링 트랜지션으로 깜빡임 방지",
-        note: "스크롤 위치와 관계없이 탭 접근 가능하여 네비게이션 편의성이 크게 향상됨. backdrop-filter는 일부 브라우저 호환성을 고려하여 반투명 배경을 기본으로 적용",
+        solution: "FeedTabs 컴포넌트에 `position: sticky`, `top: 80px` (헤더 높이 60px + 여백 20px), `zIndex: 1000` 설정. 헤더의 z-index(1100)보다 낮게 설정하여 겹침 방지. `backdropFilter: blur(20px)`와 반투명 배경(`rgba(26, 26, 46, 0.95)`) 적용으로 시각적 일관성 확보",
       },
       {
         category: "반응형 레이아웃 오버플로우 문제",
         problem: "Material-UI Container 컴포넌트가 뷰포트 너비를 초과하여 모바일 환경에서 가로 스크롤 발생",
         cause: "Material-UI의 기본 Container 설정이 뷰포트 너비를 고려하지 않아 일부 화면 크기에서 오버플로우 발생",
-        solution: "전역 CSS에 max-width 제한 및 Container 설정 조정",
-        implementation: "전역 CSS(`app/index.css`)에 `max-width: 100% !important`, `overflow-x: hidden !important` 적용. FeedPage의 Container에 `maxWidth={false}` 설정 후 내부 Box 컴포넌트로 `maxWidth: 1200px` 제한. 모든 컨테이너를 단일 컬럼으로 강제하는 CSS 규칙 추가 (`MuiContainer-root`, `MuiBox-root`에 `max-width: 100%` 적용)",
-        note: "모든 화면 크기에서 레이아웃이 뷰포트 내에 정확히 맞춰지도록 개선하여 모바일 사용자 경험 향상",
+        solution: "전역 CSS(`app/index.css`)에 `max-width: 100% !important`, `overflow-x: hidden !important` 적용. FeedPage의 Container에 `maxWidth={false}` 설정 후 내부 Box 컴포넌트로 `maxWidth: 1200px` 제한. 모든 컨테이너를 단일 컬럼으로 강제하는 CSS 규칙 추가",
       },
     ],
   },
@@ -163,52 +240,53 @@ const projectDetails = {
       "OpenAPI 명세서 작성/편집 인터페이스 및 실시간 미리보기 기능 구현",
       "Mock Server 테스트 인터페이스 및 Request/Response 스키마 관리 UI 개발",
       "Call Trace 성능 추적 시각화 및 트리 구조 자동 확장 기능 구현",
-      "코드 스니펫 생성 기능 및 다국어 지원 인증 처리",
+      "코드 스니펫 생성 기능 및 다국어 지원(i18n) 구현",
+      "인증 처리 (Bearer Token, API Key, Basic Auth) 구현",
       "WebSocket/STOMP 명세서 관리 UI 및 실시간 상태 동기화 구현",
       "JSON 에디터 통합 및 사용자 경험 최적화",
     ],
     troubleshooting: [
       {
         category: "Call Trace 트리 구조 자동 경로 탐색 및 확장",
-        problem: "Call Trace 모달에서 특정 메서드를 클릭했을 때, 해당 span이 트리 깊숙이 있어 사용자가 수동으로 부모 노드들을 모두 확장해야 하는 UX 문제가 발생했습니다.",
-        cause: "중첩된 트리 구조에서 특정 노드를 찾고, 루트부터 해당 노드까지의 모든 경로를 자동으로 확장하는 로직이 없었습니다.",
-        solution: "DFS 알고리즘을 구현한 `findSpanPath` 함수를 개발하여 대상 노드까지의 전체 경로를 자동으로 찾고, React state로 관리하여 모든 부모 노드를 한 번에 자동 확장하도록 구현했습니다. `initialExpandedSpanId` 변경 시에만 실행하여 성능을 최적화했습니다.",
+        problem: "사용자가 특정 메서드를 클릭했을 때, 그 메서드가 트리 구조의 깊은 곳에 있으면 수동으로 여러 번 클릭해서 확장해야 했습니다.",
+        cause: "트리 구조에서 특정 노드까지의 경로를 자동으로 찾는 로직이 없었습니다.",
+        solution: "재귀 함수로 해당 메서드까지 가는 경로의 모든 부모 노드를 자동으로 찾아서 한 번에 확장되도록 구현했습니다.",
       },
       {
         category: "FormDataBodyForm 무한 업데이트 루프 해결",
-        problem: "FormDataBodyForm 컴포넌트에서 `Maximum update depth exceeded` 에러가 발생하고 브라우저가 응답하지 않는 문제가 있었습니다. 사용자가 폼 필드를 수정하려고 하면 즉시 브라우저가 멈추는 현상이 발생했습니다.",
-        cause: "useEffect에서 `formData`가 변경될 때마다 `onChange`를 호출하고, `onChange`가 부모 컴포넌트의 상태를 변경하여 다시 `value` prop으로 전달되었습니다. `value` prop이 변경되면 다시 useEffect가 실행되어 무한 루프가 발생했습니다. React의 상태 업데이트 사이클이 끊기지 않아 컴포넌트가 계속 리렌더링되었습니다.",
-        solution: "useRef를 사용하여 이전 값을 추적하는 `prevValueRef`를 구현했습니다. 실제로 값이 변경되었을 때만 업데이트하도록 조건을 추가하고, `handleFormDataChange`에서 `useEffect` 대신 직접 `onChange`를 호출하도록 변경했습니다. 이를 통해 상태 업데이트 사이클을 끊고, 사용자 입력이 부모 컴포넌트로 정확히 전달되도록 했습니다. 무한 루프 문제를 완전히 해결하여 FormDataBodyForm이 정상적으로 작동하게 되었습니다.",
+        problem: "FormData 입력 필드에서 값을 변경하면 onChange → JSON 변환 → value 업데이트 → useEffect 실행 → 다시 onChange 호출이 반복되는 무한 루프가 발생했습니다.",
+        cause: "useEffect와 onChange가 서로를 트리거하는 순환 구조가 형성되었습니다.",
+        solution: "useRef로 이전 값을 저장해두고, 실제로 값이 바뀐 경우에만 업데이트하도록 수정했습니다.",
       },
       {
         category: "JSON 편집기 사용자 경험 개선",
-        problem: "JSON 입력 폼에서 자동 들여쓰기가 작동하지 않고, Tab 키를 눌러도 들여쓰기가 되지 않았습니다. 구문 강조, 라인 번호, 자동 완성 등 코드 편집 기능이 전혀 없어 사용자가 수동으로 JSON을 포맷팅해야 했습니다. 특히 중첩된 객체나 배열을 편집할 때 매우 불편했습니다.",
-        cause: "기본 `textarea` 요소는 코드 편집 기능이 제한적입니다. JSON 편집 시 들여쓰기, 구문 강조, 자동 완성 등의 기능이 필요하나, 여러 위치에서 JSON 입력이 필요하여 일관된 편집 경험을 제공하기 어려웠습니다.",
-        solution: "`react-ace`와 `ace-builds` 패키지를 설치하고 `JsonEditor` 공통 컴포넌트를 생성했습니다. JSON 모드, 다크 모드 자동 감지 및 테마 전환(monokai/github), 자동 완성, 라인 번호, 코드 폴딩 등 코드 에디터 수준의 기능을 제공했습니다. `RequestBodyForm.tsx`와 `SpecForm.tsx`에 적용하여 일관된 JSON 편집 경험을 제공했습니다. 이를 통해 JSON 편집 편의성이 크게 향상되었고, 사용자가 코드 에디터 수준의 기능을 사용할 수 있게 되었습니다.",
+        problem: "기본 textarea로는 JSON을 편집할 때 들여쓰기가 맞지 않고, 오타를 찾기 어려웠습니다.",
+        cause: "기본 textarea는 코드 편집 기능이 제한적입니다.",
+        solution: "react-ace 라이브러리를 사용해 코드 에디터처럼 들여쓰기 자동 정렬, 색상으로 구문 강조, 자동 완성 기능을 추가했습니다.",
       },
       {
         category: "Node.js 전용 라이브러리 브라우저 호환성 문제",
-        problem: "코드 스니펫 생성 기능을 위해 `openapi-snippet` 라이브러리를 사용했으나, 브라우저에서 `Module 'stream' has been externalized`, `global is not defined` 등의 에러가 발생했습니다.",
-        cause: "`openapi-snippet`은 Node.js 환경을 가정하고 설계된 라이브러리로, Node.js 전용 모듈(`stream`, `string_decoder`, `qs` 등)에 의존합니다. 브라우저 환경에는 이러한 모듈이 존재하지 않습니다.",
-        solution: "`vite-plugin-node-polyfills`를 설치하고 Vite 설정에 추가하여 Node.js 모듈을 브라우저에서 사용할 수 있도록 폴리필을 제공했습니다. `global` 변수를 `window`로 매핑하고, `process.env`를 빈 객체로 정의하여 브라우저 환경에 맞게 변환했습니다. 실패 시 fallback 함수로 자동 전환하여 안정성을 확보했습니다.",
+        problem: "코드 스니펫 생성에 사용하는 openapi-snippet 라이브러리가 Node.js 환경용이라 브라우저에서 실행 시 에러가 발생했습니다.",
+        cause: "openapi-snippet은 Node.js 전용 모듈에 의존합니다.",
+        solution: "vite-plugin-node-polyfills 플러그인을 추가해 Node.js 기능을 브라우저에서도 사용할 수 있도록 해결했습니다.",
       },
       {
         category: "WebSocket 작업 완료 토글 반응성 최적화",
-        problem: "WebSocket 명세서의 '작업 완료' 토글을 클릭해도 즉시 반응하지 않고, 몇 초 후에야 상태가 변경되어 UX 문제가 발생했습니다.",
-        cause: "토글 클릭 시 여러 비동기 작업이 순차적으로 실행되어 지연이 발생했습니다. `localProgress` 상태를 즉시 업데이트했지만, `selectedEndpoint` 변경 시 `useEffect`가 `localProgress`를 다시 초기화하여 즉시 반영되지 않았습니다.",
-        solution: "`isUpdatingProgressRef` 플래그를 추가하여 progress 업데이트 중인지 추적하도록 했습니다. 토글 핸들러에서 즉시 `localProgress`를 업데이트하고, `useEffect`에서 업데이트 중일 때는 `localProgress`를 덮어쓰지 않도록 조건을 추가했습니다. `loadEndpoints()`는 백그라운드에서 비동기로 실행하여 토글 반응성에 영향을 주지 않도록 했습니다.",
+        problem: "작업 완료 상태를 변경할 때 서버 응답을 기다리는 동안 버튼이 반응하지 않아 사용자가 여러 번 클릭하는 문제가 있었습니다.",
+        cause: "비동기 작업 완료를 기다리는 동안 UI가 반응하지 않았습니다.",
+        solution: "업데이트 중임을 표시하는 플래그를 사용해, 업데이트가 진행 중일 때는 외부 변경을 무시하고 완료되면 즉시 화면에 반영되도록 개선했습니다.",
       },
       {
         category: "Basic Auth 다국어 문자 Base64 인코딩 처리",
-        problem: "Basic Auth 미리보기에서 한국어, 일본어 등 다국어 문자를 입력하면 `InvalidCharacterError`가 발생하고 컴포넌트 렌더링이 깨지는 문제가 있었습니다.",
-        cause: "`btoa()` 함수는 ASCII 문자만 처리할 수 있어 UTF-8 문자를 직접 전달하면 에러가 발생합니다.",
-        solution: "UTF-8 문자열을 Base64로 안전하게 인코딩하는 `safeBase64` 함수를 구현했습니다. `encodeURIComponent` → `unescape` → `btoa` 순서로 3단계 변환 프로세스를 적용하고, 에러 발생 시 fallback 메시지를 표시하여 컴포넌트가 깨지지 않도록 방어 코드를 추가했습니다.",
+        problem: "Basic Auth에서 한글이 포함된 아이디/비밀번호를 인코딩할 때 브라우저 기본 함수 (btoa)가 ASCII 문자만 지원해서 에러가 발생했습니다.",
+        cause: "btoa() 함수는 ASCII 문자만 처리할 수 있습니다.",
+        solution: "UTF-8 문자를 안전하게 인코딩하는 safeBase64 함수를 만들어서 해결했습니다.",
       },
       {
         category: "React 모달 상태 기반 조건부 데이터 리프레시 패턴",
-        problem: "스키마를 생성한 후 모달을 열어도 새로 생성된 스키마가 목록에 표시되지 않는 문제가 있었습니다.",
-        cause: "컴포넌트 마운트 시점에만 API 호출을 하면, 모달이 열리는 시점의 최신 데이터를 보장할 수 없었습니다.",
-        solution: "모달 상태(`isSchemaModalOpen`)를 dependency로 사용하는 useEffect 패턴을 적용하여, 모달이 열릴 때마다 데이터를 다시 로드하도록 구현했습니다. 모달 상태가 실제로 변경될 때만 실행되도록 dependency 배열을 관리하여 불필요한 API 호출을 방지했습니다.",
+        problem: "모달을 닫은 상태에서 데이터가 변경되어도, 모달을 다시 열었을 때 이전 데이터가 그대로 보였습니다.",
+        cause: "모달이 열릴 때 최신 데이터를 가져오지 않았습니다.",
+        solution: "모달이 열릴 때 (isOpen이 true가 될 때) 마다 최신 데이터를 서버에서 가져오도록 useEffect를 설정해 항상 최신 정보를 보여주도록 수정했습니다.",
       },
     ],
   },
@@ -224,6 +302,7 @@ const ProjectDetail = () => {
   // 기본 프로젝트 데이터와 상세 정보 병합
   const project = baseProject ? {
     ...baseProject,
+    features: baseProject.features || [],
     roles: details?.roles || baseProject.roles || [],
     troubleshooting: details?.troubleshooting || [],
     video: details?.video,
@@ -309,6 +388,52 @@ const ProjectDetail = () => {
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             {project.summary}
           </p>
+
+          {(project.organization || project.period || project.teamSize || (project.myRole && project.myRole.length > 0)) && (
+            <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-semibold text-gray-600 dark:text-gray-300">
+              {project.organization && (
+                <div>
+                  <span className="text-gray-900 dark:text-white">기관</span>{" "}
+                  <span className="text-gray-600 dark:text-gray-300">{project.organization}</span>
+                </div>
+              )}
+              {project.period && (
+                <div>
+                  <span className="text-gray-900 dark:text-white">개발 기간</span>{" "}
+                  <span className="text-gray-600 dark:text-gray-300">{project.period}</span>
+                </div>
+              )}
+              {project.teamSize && (
+                <div>
+                  <span className="text-gray-900 dark:text-white">팀 인원</span>{" "}
+                  <span className="text-gray-600 dark:text-gray-300">{project.teamSize}명</span>
+                </div>
+              )}
+              {project.myRole && project.myRole.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-900 dark:text-white">내 역할</span>
+                  <div className="flex flex-wrap gap-2">
+                    {project.myRole.map((r) => (
+                      <span
+                        key={r}
+                        className={
+                          r === "FE"
+                            ? "px-3 py-1 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-200 border border-blue-200 dark:border-blue-800"
+                            : r === "BE"
+                              ? "px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800"
+                              : r === "AI"
+                                ? "px-3 py-1 rounded-full text-xs font-bold bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-200 border border-violet-200 dark:border-violet-800"
+                                : "px-3 py-1 rounded-full text-xs font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700"
+                        }
+                      >
+                        {r}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* 메인 컨텐츠 카드 */}
@@ -341,56 +466,85 @@ const ProjectDetail = () => {
             {/* 그리드 섹션 */}
             <div className="grid md:grid-cols-2 gap-8 mb-12">
               {/* 기술 스택 */}
-              <div className="p-6 rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950">
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-10 h-10 rounded-xl bg-gray-900 dark:bg-white flex items-center justify-center">
-                    <span className="text-xl">🛠️</span>
+              <div className="p-8 rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-gray-900 dark:bg-white flex items-center justify-center">
+                    <span className="text-2xl">🛠️</span>
                   </div>
                   <h3 className="text-2xl font-black text-gray-900 dark:text-white">
                     기술 스택
                   </h3>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.map((tech, index) => (
-                    <span
-                      key={index}
-                      className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm font-bold rounded-xl border border-gray-200 dark:border-gray-600 hover:scale-105 transition-transform"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                <div className="space-y-4">
+                  {Object.entries(categorizeTech(project.tech)).map(([category, techs]) => {
+                    const categoryEmojis = {
+                      Frontend: "🎨",
+                      Backend: "⚙️",
+                      "DevOps & Cloud": "☁️",
+                      "AI & Data": "🤖",
+                      "Collaboration Tools": "💬",
+                    };
+                    const categoryColors = {
+                      Frontend: "from-blue-500 to-sky-500",
+                      Backend: "from-emerald-500 to-teal-500",
+                      "DevOps & Cloud": "from-amber-500 to-orange-500",
+                      "AI & Data": "from-slate-500 to-gray-500",
+                      "Collaboration Tools": "from-purple-500 to-pink-500",
+                    };
+                    return (
+                      <div key={category} className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">{categoryEmojis[category] || "📦"}</span>
+                          <h4 className="text-sm font-bold text-gray-700 dark:text-gray-300">
+                            {category}
+                          </h4>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {techs.map((tech, index) => (
+                            <span
+                              key={index}
+                              className="px-3 py-1.5 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-xs font-bold rounded-lg border border-gray-200 dark:border-gray-600 hover:scale-105 transition-transform"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* 주요 기능 */}
-              <div className="p-6 rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950">
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-10 h-10 rounded-xl bg-gray-900 dark:bg-white flex items-center justify-center">
-                    <span className="text-xl">⚡</span>
+              {project.features && project.features.length > 0 && (
+                <div className="p-8 rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-gray-900 dark:bg-white flex items-center justify-center">
+                      <span className="text-2xl">⚡</span>
+                    </div>
+                    <h3 className="text-2xl font-black text-gray-900 dark:text-white">
+                      주요 기능
+                    </h3>
                   </div>
-                  <h3 className="text-2xl font-black text-gray-900 dark:text-white">
-                    주요 기능
-                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {project.features.map((feature, index) => (
+                      <div key={index} className="p-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-md hover:border-amber-400 dark:hover:border-amber-500 transition-all">
+                        <p className="text-sm text-gray-800 dark:text-gray-200 font-medium leading-snug">
+                          {feature}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <ul className="space-y-3">
-                  {(project.features || []).map((feature, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <span className="flex-shrink-0 mt-1 w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
-                      <span className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                        {feature}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              )}
             </div>
 
             {/* 담당 역할 */}
             {project.roles && project.roles.length > 0 && (
-              <div className="mb-12 p-6 rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-950">
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-10 h-10 rounded-xl bg-gray-900 dark:bg-white flex items-center justify-center">
-                    <span className="text-xl">👤</span>
+              <div className="mb-12 p-8 rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-gray-900 dark:bg-white flex items-center justify-center">
+                    <span className="text-2xl">👤</span>
                   </div>
                   <h3 className="text-2xl font-black text-gray-900 dark:text-white">
                     담당 역할
@@ -412,11 +566,11 @@ const ProjectDetail = () => {
             {/* 트러블슈팅 */}
             {project.troubleshooting && project.troubleshooting.length > 0 && (
               <div className="mb-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-gray-900 dark:bg-white flex items-center justify-center">
-                    <span className="text-xl">🔧</span>
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-12 rounded-xl bg-gray-900 dark:bg-white flex items-center justify-center shadow-lg">
+                    <span className="text-2xl">🔧</span>
                   </div>
-                  <h3 className="text-2xl font-black text-gray-900 dark:text-white">
+                  <h3 className="text-3xl font-black text-gray-900 dark:text-white">
                     트러블슈팅
                   </h3>
                 </div>
@@ -425,51 +579,60 @@ const ProjectDetail = () => {
                   {project.troubleshooting.map((item, index) => (
                     <div
                       key={index}
-                      className="p-6 rounded-2xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:shadow-lg transition-all"
+                      className="relative p-8 rounded-3xl border-2 border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-950 hover:shadow-2xl hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300"
                     >
                       {/* 카테고리 */}
-                      <div className="flex items-start gap-3 mb-4">
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs font-black flex-shrink-0 mt-0.5">
+                      <div className="flex items-center gap-4 mb-6">
+                        <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 text-white dark:text-gray-900 text-base font-black shadow-lg">
                           {index + 1}
                         </span>
-                        <h4 className="text-lg font-black text-gray-900 dark:text-white">
+                        <h4 className="text-xl font-black text-gray-900 dark:text-white">
                           {item.category}
                         </h4>
                       </div>
 
                       {/* 문제/원인/해결 */}
-                      <div className="ml-9 space-y-3">
-                        <div className="flex items-start gap-2">
-                          <span className="text-sm font-bold text-red-600 dark:text-red-400 min-w-[60px]">
-                            문제:
-                          </span>
-                          <span className="text-sm text-gray-700 dark:text-gray-300">
+                      <div className="space-y-4">
+                        <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/30 border-l-4 border-red-500">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-base font-black text-red-600 dark:text-red-400">
+                              문제
+                            </span>
+                            <span className="text-red-500">●</span>
+                          </div>
+                          <p className="text-base text-gray-800 dark:text-gray-200 leading-relaxed font-medium">
                             {item.problem}
-                          </span>
+                          </p>
                         </div>
 
-                        <div className="flex items-start gap-2">
-                          <span className="text-sm font-bold text-amber-600 dark:text-amber-400 min-w-[60px]">
-                            원인:
-                          </span>
-                          <span className="text-sm text-gray-700 dark:text-gray-300">
+                        <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border-l-4 border-amber-500">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-base font-black text-amber-600 dark:text-amber-400">
+                              원인
+                            </span>
+                            <span className="text-amber-500">●</span>
+                          </div>
+                          <p className="text-base text-gray-800 dark:text-gray-200 leading-relaxed font-medium">
                             {item.cause}
-                          </span>
+                          </p>
                         </div>
 
-                        <div className="flex items-start gap-2">
-                          <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 min-w-[60px]">
-                            해결:
-                          </span>
-                          <span className="text-sm text-gray-700 dark:text-gray-300">
+                        <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border-l-4 border-emerald-500">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-base font-black text-emerald-600 dark:text-emerald-400">
+                              해결
+                            </span>
+                            <span className="text-emerald-500">●</span>
+                          </div>
+                          <p className="text-base text-gray-800 dark:text-gray-200 leading-relaxed font-medium">
                             {item.solution}
-                          </span>
+                          </p>
                         </div>
 
                         {/* 노트가 있는 경우 */}
                         {item.note && (
-                          <div className="mt-3 p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                            <p className="text-xs text-gray-600 dark:text-gray-400 italic">
+                          <div className="mt-4 p-4 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
+                            <p className="text-sm text-blue-700 dark:text-blue-300 font-medium">
                               💡 {item.note}
                             </p>
                           </div>

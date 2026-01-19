@@ -44,8 +44,7 @@ const Footer = () => {
           <div className="md:col-span-2">
             <h3 className="text-2xl font-bold mb-4">이혜민</h3>
             <p className="text-gray-400 dark:text-gray-300 mb-4 max-w-md">
-              실시간 협업과 AI·RAG에 강점을 가진 백엔드 중심 풀스택
-              개발자입니다. 안정적인 서버 아키텍처와 사용자 경험을 아우르는
+              프론트엔드 개발자로, 백엔드 경험과 UI-API 흐름 이해를 바탕으로 실시간 협업과 AI·RAG 분야에 강점을 가진 개발자입니다. 안정적인 서버 아키텍처와 사용자 경험을 아우르는
               서비스를 만들어갑니다.
             </p>
             <div className="flex gap-4">

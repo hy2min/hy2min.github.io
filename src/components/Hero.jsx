@@ -38,46 +38,64 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gray-50 dark:bg-gray-900" />
       </div>
 
-      <div className="mx-auto max-w-5xl px-4 py-32 text-center">
-        <div className="space-y-8 animate-fade-in-up">
-          <div className="inline-flex items-center rounded-full border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-            <span className="relative flex h-2 w-2 mr-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-            </span>
-            Available for full-time & freelance
+      <div className="mx-auto max-w-5xl px-4 py-32">
+        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+          {/* 프로필 사진 - 누끼 처리 버전 */}
+          <div className="flex-shrink-0 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+            <div className="relative">
+              {/* 배경 제거된 이미지 - 자연스러운 형태 */}
+              <div className="w-56 h-72 md:w-72 md:h-96 relative">
+                <img
+                  src="/images/증명사진_누끼.png"
+                  alt="이혜민"
+                  className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)] dark:drop-shadow-[0_20px_50px_rgba(255,255,255,0.1)]"
+                />
+              </div>
+              {/* 온라인 상태 표시 */}
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-white dark:border-gray-900 animate-pulse shadow-lg"></div>
+            </div>
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-tight text-gray-900 dark:text-white">
-            {firstLine}
-            {firstLine.length === firstLineText.length && (
-              <>
-                <br />
-                {secondLine}
-                {secondLine.length < secondLineText.length && (
-                  <span className="inline-block w-1 h-16 md:h-20 ml-2 bg-gray-900 dark:bg-white animate-blink" />
-                )}
-              </>
-            )}
-            {firstLine.length < firstLineText.length && (
-              <span className="inline-block w-1 h-16 md:h-20 ml-2 bg-gray-900 dark:bg-white animate-blink" />
-            )}
-          </h1>
+          {/* 텍스트 컨텐츠 */}
+          <div className="flex-1 text-center md:text-left space-y-8 animate-fade-in-up">
+            <div className="inline-flex items-center rounded-full border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              <span className="relative flex h-2 w-2 mr-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              Available for full-time & freelance
+            </div>
 
-          <p className="text-lg md:text-2xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            빠른 UI, 견고한 API, 실용적인 시스템을 설계합니다.
-            <br />
-            <span className="font-semibold text-gray-900 dark:text-white">
-              API 설계
-            </span>
-            와{" "}
-            <span className="font-semibold text-gray-900 dark:text-white">
-              실시간 협업
-            </span>
-            에 집중합니다.
-          </p>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-tight text-gray-900 dark:text-white">
+              {firstLine}
+              {firstLine.length === firstLineText.length && (
+                <>
+                  <br />
+                  {secondLine}
+                  {secondLine.length < secondLineText.length && (
+                    <span className="inline-block w-1 h-16 md:h-20 ml-2 bg-gray-900 dark:bg-white animate-blink" />
+                  )}
+                </>
+              )}
+              {firstLine.length < firstLineText.length && (
+                <span className="inline-block w-1 h-16 md:h-20 ml-2 bg-gray-900 dark:bg-white animate-blink" />
+              )}
+            </h1>
 
-          <div className="flex flex-wrap justify-center gap-4 pt-8">
+            <p className="text-lg md:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed">
+              빠른 UI, 견고한 API, 실용적인 시스템을 설계합니다.
+              <br />
+              <span className="font-semibold text-gray-900 dark:text-white">
+                API 설계
+              </span>
+              와{" "}
+              <span className="font-semibold text-gray-900 dark:text-white">
+                실시간 협업
+              </span>
+              에 집중합니다.
+            </p>
+
+            <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-8">
             <button
               onClick={() => scrollTo("#projects")}
               className="group inline-flex items-center justify-center px-10 py-5 text-lg font-bold text-white bg-gray-900 dark:bg-white dark:text-gray-900 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
@@ -123,6 +141,7 @@ const Hero = () => {
                 </svg>
               </span>
             </button>
+            </div>
           </div>
         </div>
       </div>
